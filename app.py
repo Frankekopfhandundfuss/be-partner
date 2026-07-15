@@ -34,7 +34,7 @@ system_prompt = (
 # Chat-Session im Hintergrund am Leben halten
 if "chat_session" not in st.session_state:
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name="models/gemini-3.5-flash",
         system_instruction=system_prompt
     )
     st.session_state.chat_session = model.start_chat(history=[])

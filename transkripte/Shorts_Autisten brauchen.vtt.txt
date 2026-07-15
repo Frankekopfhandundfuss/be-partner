@@ -1,0 +1,33 @@
+WEBVTT
+
+1
+00:00:00.539 --> 00:00:03.199
+Autisten brauchen oftmals Routinen und
+
+2
+00:00:03.240 --> 00:00:07.179
+Struktur, also können spontane Änderungen verwirrend
+
+3
+00:00:07.239 --> 00:00:10.960
+sein. Außerdem sind komplexe Ideen und
+
+4
+00:00:11.039 --> 00:00:13.800
+Lösungswege oft schwer verbal zu
+
+5
+00:00:13.819 --> 00:00:17.819
+erklären. Zur besseren Organisation
+
+6
+00:00:17.860 --> 00:00:21.299
+und zum Austausch können optische Hilfsmittel und
+
+7
+00:00:21.340 --> 00:00:25.099
+Diagramme verwendet werden, wie zum Beispiel
+
+8
+00:00:25.180 --> 00:00:28.739
+Netzpläne oder Ablaufdiagramme.

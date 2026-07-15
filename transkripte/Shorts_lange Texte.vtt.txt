@@ -1,0 +1,61 @@
+WEBVTT
+
+1
+00:00:00.519 --> 00:00:04.339
+Lange Texte zu lesen, kann für Legastheniker eine Hürde
+
+2
+00:00:04.380 --> 00:00:07.839
+darstellen, die auch viel Energie kostet.
+
+3
+00:00:07.899 --> 00:00:11.539
+Es muss mehr Zeit zum Lesen eingeplant werden, aber auch
+
+4
+00:00:11.659 --> 00:00:15.000
+moderne Vorleseprogramme können eine Lösung
+
+5
+00:00:15.060 --> 00:00:15.720
+darstellen.
+
+6
+00:00:16.840 --> 00:00:20.279
+Außerdem schleichen sich beim Schreiben von
+
+7
+00:00:20.880 --> 00:00:24.180
+langen Texten häufig viele Fehler ein.
+
+8
+00:00:24.219 --> 00:00:27.579
+Legastheniker sind zwar in der Lage, komplexe Sätze zu
+
+9
+00:00:27.639 --> 00:00:30.760
+formulieren und können auch einen großen Wortschatz
+
+10
+00:00:30.799 --> 00:00:34.479
+haben, aber selbst Rechtschreibprogramme
+
+11
+00:00:34.979 --> 00:00:38.759
+stoßen an ihre Grenzen. Mögliche Lösungen
+
+12
+00:00:38.959 --> 00:00:42.939
+sind das Verwenden von Diktierprogrammen,
+
+13
+00:00:43.000 --> 00:00:46.199
+Übersetzungssoftware und natürlich das
+
+14
+00:00:46.319 --> 00:00:48.639
+klassische Kontrolllesen von einem
+
+15
+00:00:48.680 --> 00:00:50.779
+Mitarbeiter.

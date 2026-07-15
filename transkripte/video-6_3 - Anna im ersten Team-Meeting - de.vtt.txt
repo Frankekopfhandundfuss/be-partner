@@ -1,0 +1,435 @@
+WEBVTT
+
+video-6_3 - Anna im ersten Team-Meeting - de
+
+1
+00:00:00.420 --> 00:00:04.380
+Okay, Anna, tief durchatmen. Du bist Event Managerin.
+
+2
+00:00:04.660 --> 00:00:07.040
+Du hast mehr als zehn Jahre Berufserfahrung.
+
+3
+00:00:08.160 --> 00:00:08.940
+Du rockst das.
+
+4
+00:00:10.520 --> 00:00:12.440
+Warum klopft mein Herz dann so?
+
+5
+00:00:13.700 --> 00:00:15.380
+Ja, das neue Team,
+
+6
+00:00:16.680 --> 00:00:17.880
+die große Unbekannte.
+
+7
+00:00:19.080 --> 00:00:21.760
+In der alten Agentur war jedes Meeting ein Spießrutenlauf.
+
+8
+00:00:22.220 --> 00:00:24.900
+Wer kümmert sich um Anna? Kann die das?
+
+9
+00:00:24.920 --> 00:00:28.480
+Hier drüben? Ich habe keine Kraft mehr für Mitleid oder Panik.
+
+10
+00:00:28.540 --> 00:00:31.640
+Ich will einfach nur über das Catering und die Sponsoren reden.
+
+11
+00:00:32.061 --> 00:00:35.220
+Bitte lass es wenigstens halbwegs gut laufen. Nur halbwegs.
+
+12
+00:00:37.400 --> 00:00:38.800
+Okay, Lächeln aufsetzen.
+
+13
+00:00:40.380 --> 00:00:41.200
+Los geht es.
+
+14
+00:00:42.620 --> 00:00:44.100
+Hallo Anna, hier ist Thomas.
+
+15
+00:00:45.020 --> 00:00:47.620
+Neben mir auf deiner rechten Seite ist noch ein Stuhl frei.
+
+16
+00:00:48.040 --> 00:00:51.800
+Super, danke Thomas. Thomas denkt mit. Das ist ja toll.
+
+17
+00:00:52.540 --> 00:00:55.100
+Ja gut, ist auch der Inklusionsbeauftragte.
+
+18
+00:00:55.140 --> 00:00:58.700
+Das merkt man dann schon. In meiner alten Firma gab es so etwas gar nicht.
+
+19
+00:00:59.300 --> 00:01:00.640
+Mal sehen, wie die anderen so drauf sind.
+
+20
+00:01:01.160 --> 00:01:03.180
+Früher hieß es immer nur: "Da ist noch was frei."
+
+21
+00:01:04.000 --> 00:01:07.880
+Und ich wusste nie, wer gemeint ist und wo da eigentlich ist.
+
+22
+00:01:08.600 --> 00:01:11.960
+Und wenn ich es nicht sofort gefunden habe, haben sie mich manchmal am Arm gepackt
+
+23
+00:01:12.240 --> 00:01:14.520
+und wie einen Einkaufswagen hin- und hergeschoben.
+
+24
+00:01:15.620 --> 00:01:18.160
+Aber so erspart mir das echt viel Stress.
+
+25
+00:01:19.080 --> 00:01:22.220
+Sag mal, ist es okay, wenn ich ab jetzt immer diesen Platz nutze?
+
+26
+00:01:22.240 --> 00:01:24.720
+Dann muss ich mich nicht immer wieder neu orientieren.
+
+27
+00:01:24.780 --> 00:01:28.700
+Ja, natürlich, kein Problem. Ist das überhaupt okay für dich, so nebeneinander?
+
+28
+00:01:29.060 --> 00:01:30.320
+Oder sitzt du lieber gegenüber?
+
+29
+00:01:30.360 --> 00:01:32.640
+Nein, ich bin froh, wenn wir nebeneinander sitzen.
+
+30
+00:01:33.140 --> 00:01:36.980
+Sehende sitzen oft gegenüber für einen besseren Blickkontakt, aber
+
+31
+00:01:37.080 --> 00:01:40.460
+viele Blinde sitzen lieber nebeneinander für eine bessere Verbindung zum
+
+32
+00:01:40.480 --> 00:01:41.260
+Gesprächspartner.
+
+33
+00:01:42.060 --> 00:01:45.080
+Anna, hast du die Unterlagen für das Catering eigentlich schon bekommen?
+
+34
+00:01:45.870 --> 00:01:48.100
+War es für dich lesbar mit dem Screenreader?
+
+35
+00:01:48.160 --> 00:01:50.560
+Ich habe extra auf alle Sonderzeichen verzichtet.
+
+36
+00:01:50.580 --> 00:01:53.240
+Ich habe gehört, das soll mit Screenreader ja sehr nervig sein.
+
+37
+00:01:54.080 --> 00:01:57.630
+Ja, das stimmt. Ist alles angekommen und ich konnte es mir auch problemlos vorlesen
+
+38
+00:01:57.680 --> 00:02:01.320
+lassen. Danke dir. Der kennt sich ja aus.
+
+39
+00:02:01.900 --> 00:02:03.380
+Er weiß, was ein Screenreader ist.
+
+40
+00:02:04.120 --> 00:02:07.460
+Da hat doch bestimmt schon mal eine Schulung zum inklusiven Arbeiten stattgefunden.
+
+41
+00:02:08.140 --> 00:02:08.461
+Toll.
+
+42
+00:02:09.361 --> 00:02:12.620
+Sonst musste ich immer allen alles lange erklären.
+
+43
+00:02:12.640 --> 00:02:15.340
+Und super, er redet auch direkt mit mir.
+
+44
+00:02:15.380 --> 00:02:19.000
+Nicht wie früher oft über meinen Kopf hinweg mit irgendeiner Kollegin
+
+45
+00:02:19.300 --> 00:02:23.260
+über mich. Endlich bin ich hier die Ansprechpartnerin für meinen eigenen
+
+46
+00:02:23.300 --> 00:02:23.540
+Job.
+
+47
+00:02:24.380 --> 00:02:28.000
+Maria, kannst du mir die Sponsorenliste vom letzten Jahr später noch mailen?
+
+48
+00:02:30.280 --> 00:02:32.740
+Oh, sorry, ich hatte nur den Daumen gehoben.
+
+49
+00:02:32.920 --> 00:02:34.540
+Das bringt dich natürlich überhaupt nicht weiter.
+
+50
+00:02:35.020 --> 00:02:36.540
+Ich schicke es dir direkt nach dem Meeting, okay?
+
+51
+00:02:37.420 --> 00:02:40.560
+Ich hätte mich schon gewundert. Aber super, dass sie es selbst gemerkt hat.
+
+52
+00:02:40.960 --> 00:02:44.420
+Früher habe ich oft sekundenlang in die Stille gelauscht und mich gefragt:
+
+53
+00:02:44.940 --> 00:02:48.840
+Hören die mich überhaupt? Ein einfaches Ja macht so einen
+
+54
+00:02:48.880 --> 00:02:49.680
+großen Unterschied.
+
+55
+00:02:50.180 --> 00:02:53.080
+Ich würde sie dann auch bei Teams hochladen, aber da ist die Benennung der
+
+56
+00:02:53.100 --> 00:02:56.480
+Dokumente gerade noch eine Katastrophe und das ist für dich sicherlich noch
+
+57
+00:02:56.520 --> 00:02:59.380
+komplizierter als für uns eh schon, oder?
+
+58
+00:02:59.400 --> 00:03:02.920
+Wollen wir uns später mal zusammensetzen und für dich sinnvolle Benennungen suchen,
+
+59
+00:03:03.000 --> 00:03:05.400
+damit du dich in der Ordnerstruktur besser zurechtfindest?
+
+60
+00:03:05.430 --> 00:03:08.880
+Das wäre natürlich toll. Teams ist sonst mit dem Screenreader echt die
+
+61
+00:03:08.940 --> 00:03:09.440
+Hölle.
+
+62
+00:03:09.540 --> 00:03:11.680
+So, lasst uns mal langsam anfangen.
+
+63
+00:03:12.100 --> 00:03:15.840
+Wir sind ja heute hier, um wie jedes Jahr den Tag der offenen Tür zu planen und zu
+
+64
+00:03:15.880 --> 00:03:19.860
+besprechen. Wie wir ja bereits gemerkt haben, gibt uns dieses Event immer
+
+65
+00:03:19.930 --> 00:03:23.900
+eine gute Möglichkeit, uns als inklusives Unternehmen zu präsentieren
+
+66
+00:03:23.940 --> 00:03:27.800
+und mit allen Menschen verschiedenster Ausgangslagen niedrigschwellig ins Gespräch
+
+67
+00:03:27.820 --> 00:03:31.480
+zu kommen und sie als potenzielle Mitarbeiter zu gewinnen.
+
+68
+00:03:31.540 --> 00:03:34.500
+Anna, du hattest ja Kontakt zu den Partnern und
+
+69
+00:03:34.540 --> 00:03:38.440
+Sponsoren. Willst du vielleicht gleich am Anfang etwas dazu sagen?
+
+70
+00:03:38.480 --> 00:03:39.320
+Ja, kann ich gerne machen.
+
+71
+00:03:40.500 --> 00:03:43.940
+Moment, ich hole noch schnell mein Handy. Ich bin gleich wieder da.
+
+72
+00:03:43.980 --> 00:03:46.900
+Wie toll, sie sagt Bescheid, wenn sie den Raum verlässt.
+
+73
+00:03:46.940 --> 00:03:50.820
+Mein alter Chef ist oft wortlos einfach rausgegangen, um Kaffee zu
+
+74
+00:03:50.860 --> 00:03:54.720
+holen oder so. Ich habe zwei Minuten lang begeistert meine Idee
+
+75
+00:03:54.760 --> 00:03:57.300
+einer leeren Stuhlreihe präsentiert.
+
+76
+00:03:57.360 --> 00:04:01.300
+Mann, das war so peinlich. Aber hier weiß ich immer genau, wer noch
+
+77
+00:04:01.320 --> 00:04:01.920
+im Raum ist.
+
+78
+00:04:03.040 --> 00:04:07.020
+Anna, hier wird es etwas eng. Ist es okay, wenn ich dein Handy ein Stück nach vorne
+
+79
+00:04:07.100 --> 00:04:08.660
+zu deiner Wasserflasche schiebe?
+
+80
+00:04:08.800 --> 00:04:10.520
+Sicher, kein Problem. Danke fürs Fragen.
+
+81
+00:04:11.320 --> 00:04:14.300
+Kaum zu glauben, das läuft ja super heute.
+
+82
+00:04:14.310 --> 00:04:17.519
+Er fragt, bevor er mein Zeug anfasst. Unglaublich.
+
+83
+00:04:18.380 --> 00:04:21.820
+Früher haben Leute meine Sachen einfach aufgeräumt.
+
+84
+00:04:21.860 --> 00:04:25.700
+Das war so hart, als ich meinen Blindenstock gesucht habe, zehn Minuten lang, nur
+
+85
+00:04:25.740 --> 00:04:29.400
+weil ihn jemand nur kurz zur Seite gestellt hatte.
+
+86
+00:04:29.420 --> 00:04:32.940
+Sag mal, Anna, bezüglich der Präsentation nächste Woche bei Herrn Gustave:
+
+87
+00:04:33.720 --> 00:04:37.000
+Wie schätzt du denn die Zeitplanung ein? Brauchen wir da mehr Puffer?
+
+88
+00:04:37.340 --> 00:04:40.620
+Ja, plane mal bitte lieber eine halbe Stunde mehr ein in der Feedbackrunde.
+
+89
+00:04:41.200 --> 00:04:44.260
+Ich kenne ihn ja schon länger. Er neigt manchmal dazu, sich in Details zu
+
+90
+00:04:44.340 --> 00:04:44.760
+verlieren.
+
+91
+00:04:45.900 --> 00:04:48.120
+Ja, stimmt. Danke, dass du es noch mal gesagt hast.
+
+92
+00:04:48.700 --> 00:04:52.360
+Das gibt es doch gar nicht. Jetzt bin ich bestimmt schon 20 Minuten im
+
+93
+00:04:52.400 --> 00:04:55.920
+Meeting und es geht nur um fachliche Themen.
+
+94
+00:04:55.960 --> 00:04:59.400
+Noch nicht eine einzige indiskrete Frage zu meiner Behinderung.
+
+95
+00:05:00.380 --> 00:05:02.880
+In meinem alten Team war ich oft das Exponat.
+
+96
+00:05:03.580 --> 00:05:05.200
+Hier bin ich einfach nur die Kollegin.
+
+97
+00:05:07.280 --> 00:05:09.720
+So, jetzt aber. Ich werfe jetzt die Folien an die Wand.
+
+98
+00:05:10.240 --> 00:05:13.860
+Ich lese immer vor, was genau da drinsteht und die Grafiken und Bilder würde ich
+
+99
+00:05:13.900 --> 00:05:15.720
+dann beschreiben, damit sie alle mitbekommen.
+
+100
+00:05:16.400 --> 00:05:19.860
+Die barrierefreie Datei hatte ich ja gestern schon an alle herumgeschickt.
+
+101
+00:05:20.430 --> 00:05:22.180
+Dann können wir jetzt direkt starten, oder?
+
+102
+00:05:22.820 --> 00:05:26.380
+Ja, gerne. Ich habe meinen Screenreader schon startklar und bin auf Folie eins.
+
+103
+00:05:28.440 --> 00:05:31.960
+Es läuft einfach. Kein Betteln um lesbare PDFs,
+
+104
+00:05:32.380 --> 00:05:36.120
+kein, "Oh, das haben wir vergessen, Anna, lesen wir dir nachher vor.", kein, "Ach,
+
+105
+00:05:36.280 --> 00:05:39.580
+ist nicht so wichtig." Ich kann meinen Job einfach machen,
+
+106
+00:05:40.180 --> 00:05:41.380
+genau wie alle anderen auch.
+
+107
+00:05:42.540 --> 00:05:42.980
+Ich glaube,
+
+108
+00:05:43.840 --> 00:05:44.460
+hier bleibe ich.

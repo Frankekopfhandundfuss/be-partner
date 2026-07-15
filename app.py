@@ -6,37 +6,22 @@ import google.generativeai as genai
 # Chat-UI aufbauen
 st.title("Transkript Assistent")
 
-
 # 1. API-Key sicher aus den Streamlit Secrets laden
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# 2. Transkripte laden (Der ultimative Scanner)
+# 2. Transkripte laden (angepasst auf die echten Dateiendungen)
 @st.cache_data
 def load_transcripts():
     text = ""
-    alle_dateien = []
-    
-    for root, dirs, files in os.walk("."):
-        for file in files:
-            # Wir filtern Systemordner wie .git heraus, damit die Liste übersichtlich bleibt
-            if ".git" not in root:
-                alle_dateien.append(file)
-            
-            # .lower() fängt auch großgeschriebene .VTT Endungen ab!
-            if file.lower().endswith(".vtt"):
-                file_path = os.path.join(root, file)
-                with open(file_path, "r", encoding="utf-8") as f:
-                    text += f"\n--- Datei: {file} ---\n"
-                    text += f.read()
-                    
-    return text, alle_dateien
-
-transcripts_text, gefundene_dateien = load_transcripts()
-
-# Die Ausgabe auf der Website:
-st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")
-st.write("Diese Dateien liegen aktuell wirklich auf dem Server:", gefundene_dateien)
+    # Sucht nach allen Textdateien (deckt deine .vtt.txt ab)
+    for file in glob.glob("**/*.txt", recursive=True):
+        # Die requirements.txt ignorieren wir, das ist kein Transkript
+        if "requirements.txt" not in file: 
+            with open(file, "r", encoding="utf-8") as f:
+                text += f"\n--- Datei: {os.path.basename(file)} ---\n"
+                text += f.read()
+    return text
 
 transcripts_text = load_transcripts()
 st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")
@@ -69,18 +54,14 @@ for message in st.session_state.messages:
 # 4. Neue Frage verarbeiten
 if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
     
+    # Frage des Nutzers anzeigen und speichern
+    st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
 
+    # Antwort der KI holen und live anzeigen
     with st.chat_message("assistant"):
         response = st.session_state.chat_session.send_message(prompt, stream=True)
-        full_response = ""
-        message_placeholder = st.empty()
-        
-        for chunk in response:
-            full_response += chunk.text
-            message_placeholder.markdown(full_response + "▌") # Erzeugt den Tipp-Effekt
-        message_placeholder.markdown(full_response)
+        full_response = st.write_stream(response)
     
+    # Antwort in der Historie speichern
     st.session_state.messages.append({"role": "assistant", "content": full_response})

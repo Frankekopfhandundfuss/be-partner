@@ -1,0 +1,25 @@
+WEBVTT
+
+1
+00:00:00.179 --> 00:00:03.039
+Autisten bevorzugen strukturiertes
+
+2
+00:00:03.240 --> 00:00:07.059
+Arbeiten, bei dem Aufgaben einen klar definierten
+
+3
+00:00:07.139 --> 00:00:10.239
+Anfang und ein erkennbares Ende haben.
+
+4
+00:00:12.019 --> 00:00:15.100
+Um Missverständnisse zu vermeiden, sollten
+
+5
+00:00:15.239 --> 00:00:18.739
+Arbeitsaufträge vorzugsweise schriftlich und
+
+6
+00:00:19.239 --> 00:00:22.699
+in konkreten Schritten vorliegen.

@@ -1,0 +1,41 @@
+WEBVTT
+
+1
+00:00:00.239 --> 00:00:04.059
+Lesen ist ein Problem für Legastheniker und Schriftarten sind
+
+2
+00:00:04.079 --> 00:00:07.899
+dabei seeehr wichtig. Bei vielen Schriftarten
+
+3
+00:00:08.220 --> 00:00:11.380
+sehen manche Buchstaben sehr ähnlich aus.
+
+4
+00:00:11.420 --> 00:00:14.979
+Dies führt zu vielen Fehlern und einer verlangsamten
+
+5
+00:00:15.039 --> 00:00:16.739
+Geschwindigkeit beim Lesen.
+
+6
+00:00:17.719 --> 00:00:21.359
+Ein Lösungsansatz ist das Verwenden von Schriftarten, welche deutliche
+
+7
+00:00:21.420 --> 00:00:25.359
+Unterschiede in der Buchstabendarstellung haben, wie zum Beispiel
+
+8
+00:00:25.979 --> 00:00:29.360
+Open Dyslexia. Außerdem sollte auf die
+
+9
+00:00:29.440 --> 00:00:33.139
+Schriftgröße und den Kontrast geachtet werden, um den
+
+10
+00:00:33.200 --> 00:00:35.059
+Text leserlich zu machen.

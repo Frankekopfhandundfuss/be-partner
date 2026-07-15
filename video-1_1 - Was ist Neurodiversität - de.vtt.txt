@@ -1,0 +1,302 @@
+WEBVTT
+video-1_1 - Was ist Neurodiversität - de
+
+1
+00:00:00.220 --> 00:00:03.980
+Was ist Neurodivergenz? Neurodivergenz bedeutet, das
+
+2
+00:00:04.020 --> 00:00:06.660
+Gehirn entwickelt sich anders als bei den meisten Menschen.
+
+3
+00:00:07.280 --> 00:00:11.200
+Das klingt erst einmal nach einem Nachteil, aber das ist nur die halbe Wahrheit.
+
+4
+00:00:11.760 --> 00:00:15.620
+Denn wo das Gehirn in manchen Bereichen weniger leistet, entwickelt
+
+5
+00:00:15.680 --> 00:00:18.460
+es in anderen oft besondere Stärken.
+
+6
+00:00:19.340 --> 00:00:21.760
+Eine passende Analogie kommt aus der IT-Welt.
+
+7
+00:00:22.340 --> 00:00:25.400
+Neurodivergente Gehirne haben eine leicht andere Architektur.
+
+8
+00:00:26.080 --> 00:00:29.000
+Wenn die meisten Menschen mit einem Standard-PC zu vergleichen sind, sind
+
+9
+00:00:29.040 --> 00:00:31.820
+neurodivergente Menschen eher der Mac-Computer.
+
+10
+00:00:33.040 --> 00:00:36.800
+Und genau wie bei Computern gilt: Keiner ist per se
+
+11
+00:00:36.900 --> 00:00:39.600
+besser, sie funktionieren einfach anders.
+
+12
+00:00:41.580 --> 00:00:45.100
+Wichtig dabei: Neurodivergenz ist kein einheitliches
+
+13
+00:00:45.140 --> 00:00:48.760
+Konzept. Es ist ein Spektrum und ein sehr breites.
+
+14
+00:00:50.480 --> 00:00:54.460
+Aber welche Formen gibt es? Autismus zeigt sich vor
+
+15
+00:00:54.580 --> 00:00:58.480
+allem durch eine andere Art, die Welt wahrzunehmen und mit anderen
+
+16
+00:00:58.740 --> 00:01:02.680
+zu kommunizieren. Sinnesreize, die Geräuschkulisse im
+
+17
+00:01:02.840 --> 00:01:06.660
+Großraumbüro, Neonlichter, Berührungen wie
+
+18
+00:01:06.880 --> 00:01:08.800
+Händeschütteln oder Umarmungen.
+
+19
+00:01:09.320 --> 00:01:13.080
+All das kann intensiver oder auch
+
+20
+00:01:13.140 --> 00:01:15.300
+gedämpfter wirken als bei anderen.
+
+21
+00:01:15.540 --> 00:01:19.230
+Was dafür oft ausgeprägt ist: eine starke Detailorientierung und eine
+
+22
+00:01:19.300 --> 00:01:20.990
+außergewöhnliche Mustererkennung.
+
+23
+00:01:22.140 --> 00:01:25.960
+ADHS kennen viele vor allem als Ablenkbarkeit oder Bewegungsdrang.
+
+24
+00:01:26.860 --> 00:01:30.200
+Aber da ist noch etwas: der sogenannte Hyperfokus.
+
+25
+00:01:30.740 --> 00:01:34.540
+Menschen mit ADHS können in Themen, die sie interessieren, regelrecht versinken,
+
+26
+00:01:34.580 --> 00:01:38.000
+mit einer Intensivität, die andere kaum erreichen.
+
+27
+00:01:38.280 --> 00:01:41.820
+Dazu kommt eine hohe Stressresilienz, die in Drucksituationen einen
+
+28
+00:01:42.000 --> 00:01:43.360
+echten Vorteil sein kann.
+
+29
+00:01:44.740 --> 00:01:47.640
+Dyspraxie betrifft die Motorik. Bewegungen und
+
+30
+00:01:47.720 --> 00:01:51.440
+Handlungsabläufe können langsamer sein, manchmal auch das
+
+31
+00:01:51.460 --> 00:01:54.340
+Sprechen. Oder es gibt Schwierigkeiten schon bei der
+
+32
+00:01:54.380 --> 00:01:55.720
+Handlungsplanung.
+
+33
+00:01:57.200 --> 00:02:01.020
+Dyslexie, also Lese-Rechtschreib-Schwäche wie bei mir,
+
+34
+00:02:01.600 --> 00:02:04.720
+verlangsamt das Lesen und macht schriftliche Kommunikation
+
+35
+00:02:04.780 --> 00:02:08.700
+schwieriger. Was sich dafür oft entwickelt: starke Rhetorik,
+
+36
+00:02:08.920 --> 00:02:11.640
+räumliches Denken und ein feines Gespür für Details.
+
+37
+00:02:13.840 --> 00:02:17.120
+Dyskalkulie bezeichnet Schwierigkeiten mit
+
+38
+00:02:17.260 --> 00:02:20.970
+Zahlen und Mengen, Zahlendreher, Probleme mit der
+
+39
+00:02:21.140 --> 00:02:23.460
+Uhr oder mit dreidimensionalem Denken.
+
+40
+00:02:24.200 --> 00:02:27.600
+Auch hier findet sich häufig als Ausgleich, wie bei der Dyslexie,
+
+41
+00:02:28.020 --> 00:02:29.690
+eine ausgeprägte Detailwahrnehmung.
+
+42
+00:02:31.560 --> 00:02:34.560
+Synästhesie ist eine besondere Form der Wahrnehmung.
+
+43
+00:02:34.880 --> 00:02:37.220
+Reize lösen zusätzliches Empfinden aus.
+
+44
+00:02:37.240 --> 00:02:40.640
+Buchstaben haben Farben, Musik erscheint als Landschaft, Zahlen haben
+
+45
+00:02:40.650 --> 00:02:44.640
+Persönlichkeiten. Es klingt ungewöhnlich, aber für
+
+46
+00:02:44.700 --> 00:02:47.680
+Betroffene ist es einfach die Art, wie die Welt sich anfühlt.
+
+47
+00:02:50.580 --> 00:02:53.200
+Das Tourette-Syndrom ist vor allem für seine Tics
+
+48
+00:02:53.220 --> 00:02:56.620
+bekannt. Unkontrollierbares Zucken,
+
+49
+00:02:57.040 --> 00:03:00.640
+Gesten oder verbale Äußerungen. Was weniger
+
+50
+00:03:00.660 --> 00:03:04.220
+bekannt ist: Viele Menschen mit Tourette entwickeln eine starke innere Disziplin
+
+51
+00:03:04.400 --> 00:03:08.180
+und Konzentration, denn durch Ablenkung oder Stress brechen die
+
+52
+00:03:08.200 --> 00:03:12.060
+Tics stärker durch. Routinen helfen dabei, diesen Aufwand
+
+53
+00:03:12.120 --> 00:03:12.780
+zu reduzieren.
+
+54
+00:03:14.520 --> 00:03:15.980
+Was bedeutet das im Alltag?
+
+55
+00:03:16.940 --> 00:03:20.760
+In der Realität begegnet man meistens Mischformen, die sich
+
+56
+00:03:20.840 --> 00:03:23.960
+nicht nur als Einschränkung offenbaren,
+
+57
+00:03:24.740 --> 00:03:28.720
+sondern häufig auch als Spezialisierung in eigenen
+
+58
+00:03:28.760 --> 00:03:31.620
+Gebieten und manchmal sogar als
+
+59
+00:03:31.700 --> 00:03:33.459
+Hochbegabung auffallen.
+
+60
+00:03:35.920 --> 00:03:39.760
+Die vermeintlichen Stärken und Schwächen hängen dabei oft direkt zusammen.
+
+61
+00:03:39.800 --> 00:03:43.760
+Die Stärke ist nicht zufällig da. Sie ist häufig die andere Seite von der
+
+62
+00:03:43.820 --> 00:03:47.720
+Einschränkung. Manchmal gibt sie der Person einen echten
+
+63
+00:03:47.840 --> 00:03:48.360
+Vorteil.
+
+64
+00:03:49.880 --> 00:03:53.280
+Manchmal hilft sie einfach dabei, mit den Herausforderungen des Alltags
+
+65
+00:03:53.580 --> 00:03:54.460
+klarzukommen.
+
+66
+00:03:55.940 --> 00:03:59.220
+Eines sollte man im Hinterkopf behalten: Diagnosen sind
+
+67
+00:03:59.340 --> 00:04:02.980
+Schubladen und Menschen passen selten perfekt rein.
+
+68
+00:04:03.660 --> 00:04:07.520
+Zwei Menschen mit der gleichen Diagnose können sie im Alltag völlig
+
+69
+00:04:07.560 --> 00:04:11.460
+unterschiedlich erleben. Dazu kommt, dass sich viele Formen
+
+70
+00:04:11.500 --> 00:04:13.960
+der Neurodivergenz überschneiden.
+
+71
+00:04:14.000 --> 00:04:17.899
+Grenzen zwischen den Diagnosen sind oft unscharf und auch die Grenze
+
+72
+00:04:17.959 --> 00:04:21.360
+zum Neurotypischen ist fließender als man denkt.
+
+73
+00:04:22.160 --> 00:04:25.260
+Letztlich ist es oft keine Frage von entweder
+
+74
+00:04:25.580 --> 00:04:29.220
+oder, sondern von wie stark, wie ausgeprägt
+
+75
+00:04:29.240 --> 00:04:32.260
+bestimmte Fähigkeiten oder Schwierigkeiten sind.

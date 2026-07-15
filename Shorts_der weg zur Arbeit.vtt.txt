@@ -1,0 +1,45 @@
+WEBVTT
+
+1
+00:00:00.079 --> 00:00:03.159
+Der Weg zur Arbeit ist für alle stressig.
+
+2
+00:00:03.919 --> 00:00:07.199
+Die lauten Geräusche und vielen Menschen auf engem Raum,
+
+3
+00:00:08.199 --> 00:00:11.879
+aber insbesondere für Menschen mit einer Neurodivergenz sind
+
+4
+00:00:11.939 --> 00:00:14.679
+diese Elemente besonders stressig.
+
+5
+00:00:15.279 --> 00:00:16.319
+Es überreizt
+
+6
+00:00:17.219 --> 00:00:20.899
+und kostet sehr viel Energie, bevor der Arbeitstag
+
+7
+00:00:21.000 --> 00:00:22.360
+überhaupt begonnen hat.
+
+8
+00:00:23.239 --> 00:00:27.180
+Wenn man dem Mitarbeiter erlaubt, nicht in der Rush Hour zur Arbeit
+
+9
+00:00:27.220 --> 00:00:31.100
+zu fahren oder die Option für Homeoffice, dann
+
+10
+00:00:31.179 --> 00:00:34.700
+entfernt oder reduziert dies den Stress der
+
+11
+00:00:34.799 --> 00:00:36.540
+Anfahrt.

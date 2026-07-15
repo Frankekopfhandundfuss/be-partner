@@ -36,7 +36,7 @@ If two excerpts about the same subtopic are within 30 seconds of each other, tre
 
 Example: mentions at 00:01:10 and 00:01:25 -> ONE entry at 00:01:10. Mentions at 00:01:10 and 00:02:20 -> TWO separate entries. 
 
-Step 2 – Calculate the timestamp for each entry (show this working silently, do not print it): 
+Step 2 – Calculate the timestamp for each entry. Show your math briefly inside <calc> ... </calc> tags before writing the final output line. 
 a) Take the original timestamp (HH:MM:SS.mmm), convert to total seconds. b) Subtract 4. If below 0, use 0. c) Convert to URL format: 
 result < 60 -> "{{seconds}}s" 
 result >= 60 -> "{{minutes}}m{{seconds}}s" 

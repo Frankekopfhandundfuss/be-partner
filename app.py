@@ -21,55 +21,32 @@ def calculate_ts_url(timestamp_str):
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# 2. Transkripte laden
+# 2. Transkripte laden (WICHTIG: Text "eindampfen")
 @st.cache_data
 def load_transcripts():
     text = ""
     for file in glob.glob("**/*.txt", recursive=True):
         if "requirements.txt" not in file: 
             with open(file, "r", encoding="utf-8") as f:
-                text += f"\n--- Datei: {os.path.basename(file)} ---\n"
-                text += f.read()
+                # Wir entfernen überflüssige Zeilenumbrüche, um Token zu sparen
+                content = f.read().replace("\n", " ").strip()
+                text += f"[{os.path.basename(file)}] {content} "
     return text
 
 transcripts_text = load_transcripts()
-# Zum Testen anlassen, wenn du fertig bist, einfach mit # auskommentieren
-st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")
 
-# 3. Gemini konfigurieren & Datei vorbereiten
+# 3. Gemini konfigurieren (Blitzschnell ohne Dateianhang)
+system_prompt = f"""Du bist ein Extraktions-Assistent. Suche in den Kontextdaten.
+Format: [SLUG] | [ORIGINAL_TIMESTAMP] | [ERKLÄRUNG]
+Wenn nichts gefunden: "Keine relevante Stelle in der Wissensbasis gefunden."
+
+KONTEXT:
+{transcripts_text}
+"""
+
 if "chat_session" not in st.session_state:
-    # Wir speichern den Text kurz als echte Datei, damit Gemini sie als Anhang bekommt
-    with open("temp_transkripte.txt", "w", encoding="utf-8") as f:
-        f.write(transcripts_text)
-    
-    # Datei hochladen
-    transkript_datei = genai.upload_file(path="temp_transkripte.txt")
-    
-    # System-Prompt ist jetzt nur noch die Anweisung
-    system_prompt = """Du bist ein Extraktions-Assistent. 
-    Suche in den bereitgestellten Transkripten nach relevanten Stellen.
-    Wenn du eine Stelle findest, gib mir NUR dieses Format aus:
-    [SLUG] | [ORIGINAL_TIMESTAMP] | [ERKLÄRUNG]
-
-    Wenn nichts gefunden wurde, antworte exakt: "Keine relevante Stelle in der Wissensbasis gefunden."
-    """
-    
-    model = genai.GenerativeModel(
-        model_name="models/gemini-3.5-flash",
-        system_instruction=system_prompt
-    )
-    
-    # Chat startet mit dem Dateianhang in der Historie
-    st.session_state.chat_session = model.start_chat(
-        history=[{"role": "user", "parts": [transkript_datei, "Hier ist die Transkript-Datei als Wissensbasis."]}]
-    )
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    model = genai.GenerativeModel(model_name="models/gemini-3.5-flash", system_instruction=system_prompt)
+    st.session_state.chat_session = model.start_chat(history=[])
 
 # 4. Neue Frage verarbeiten
 if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):

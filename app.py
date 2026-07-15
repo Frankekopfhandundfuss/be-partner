@@ -61,7 +61,14 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
     # Antwort der KI holen und live anzeigen
     with st.chat_message("assistant"):
         response = st.session_state.chat_session.send_message(prompt, stream=True)
-        full_response = st.write_stream(response)
+        
+        # HIER IST DIE LÖSUNG: Wir packen die Google-Datenpakete aus
+        def stream_text():
+            for chunk in response:
+                # Wir geben nur den reinen Text an Streamlit weiter
+                yield chunk.text
+                
+        full_response = st.write_stream(stream_text())
     
     # Antwort in der Historie speichern
     st.session_state.messages.append({"role": "assistant", "content": full_response})

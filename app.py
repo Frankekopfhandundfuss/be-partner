@@ -11,19 +11,32 @@ st.title("Transkript Assistent")
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# 2. Transkripte laden (kugelsichere Methode)
+# 2. Transkripte laden (Der ultimative Scanner)
 @st.cache_data
 def load_transcripts():
     text = ""
-    # Durchsucht garantiert jeden Ordner und Unterordner
+    alle_dateien = []
+    
     for root, dirs, files in os.walk("."):
         for file in files:
-            if file.endswith(".vtt"):
+            # Wir filtern Systemordner wie .git heraus, damit die Liste übersichtlich bleibt
+            if ".git" not in root:
+                alle_dateien.append(file)
+            
+            # .lower() fängt auch großgeschriebene .VTT Endungen ab!
+            if file.lower().endswith(".vtt"):
                 file_path = os.path.join(root, file)
                 with open(file_path, "r", encoding="utf-8") as f:
                     text += f"\n--- Datei: {file} ---\n"
                     text += f.read()
-    return text
+                    
+    return text, alle_dateien
+
+transcripts_text, gefundene_dateien = load_transcripts()
+
+# Die Ausgabe auf der Website:
+st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")
+st.write("Diese Dateien liegen aktuell wirklich auf dem Server:", gefundene_dateien)
 
 transcripts_text = load_transcripts()
 st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")

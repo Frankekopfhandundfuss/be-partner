@@ -6,72 +6,69 @@ import google.generativeai as genai
 # Chat-UI aufbauen
 st.title("Transkript Assistent")
 
-def calculate_ts_url(timestamp_str):
-    h, m, s = timestamp_str.split(':')
-    s, ms = s.split('.')
-    total_seconds = int(h)*3600 + int(m)*60 + int(s)
-    result = max(0, total_seconds - 4)
-    m_res = result // 60
-    s_res = result % 60
-    if m_res == 0:
-        return f"{s_res}s"
-    return f"{m_res}m{s_res}s"
-
 # 1. API-Key sicher aus den Streamlit Secrets laden
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# 2. Transkripte laden (WICHTIG: Text "eindampfen")
+# 2. Transkripte laden (angepasst auf die echten Dateiendungen)
 @st.cache_data
 def load_transcripts():
     text = ""
+    # Sucht nach allen Textdateien (deckt deine .vtt.txt ab)
     for file in glob.glob("**/*.txt", recursive=True):
+        # Die requirements.txt ignorieren wir, das ist kein Transkript
         if "requirements.txt" not in file: 
             with open(file, "r", encoding="utf-8") as f:
-                # Wir entfernen überflüssige Zeilenumbrüche, um Token zu sparen
-                content = f.read().replace("\n", " ").strip()
-                text += f"[{os.path.basename(file)}] {content} "
+                text += f"\n--- Datei: {os.path.basename(file)} ---\n"
+                text += f.read()
     return text
 
 transcripts_text = load_transcripts()
+st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")
 
-# 3. Gemini konfigurieren (Blitzschnell ohne Dateianhang)
-system_prompt = f"""Du bist ein Extraktions-Assistent. Suche in den Kontextdaten.
-Format: [SLUG] | [ORIGINAL_TIMESTAMP] | [ERKLÄRUNG]
-Wenn nichts gefunden: "Keine relevante Stelle in der Wissensbasis gefunden."
+# 3. Gemini konfigurieren
+system_prompt = (
+    "Du bist ein hilfsbereiter Assistent für eine Website. "
+    "Beantworte die Fragen der Nutzer AUSSCHLIESSLICH basierend auf den folgenden Transkripten. "
+    "Wenn die Antwort in den Texten nicht zu finden ist, antworte "
+    "höflich, dass dir dazu keine Informationen vorliegen.\n\n"
+    f"HIER SIND DIE TRANSKRIPTE:\n{transcripts_text}"
+)
 
-KONTEXT:
-{transcripts_text}
-"""
-
+# Chat-Session im Hintergrund am Leben halten
 if "chat_session" not in st.session_state:
-    model = genai.GenerativeModel(model_name="models/gemini-3.5-flash", system_instruction=system_prompt)
+    model = genai.GenerativeModel(
+        model_name="models/gemini-3.5-flash",
+        system_instruction=system_prompt
+    )
     st.session_state.chat_session = model.start_chat(history=[])
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Bisherigen Chatverlauf auf der Website anzeigen
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 # 4. Neue Frage verarbeiten
 if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
+    
+    # Frage des Nutzers anzeigen und speichern
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
+    # Antwort der KI holen und live anzeigen
     with st.chat_message("assistant"):
         response = st.session_state.chat_session.send_message(prompt, stream=True)
         
-        def process_and_stream():
+        # HIER IST DIE LÖSUNG: Wir packen die Google-Datenpakete aus
+        def stream_text():
             for chunk in response:
-                if chunk.text:
-                    text = chunk.text
-                    if "|" in text:
-                        parts = text.split(" | ")
-                        if len(parts) == 3:
-                            slug, ts, erklärung = parts
-                            ts_url = calculate_ts_url(ts.strip())
-                            url = f"https://bepartner-test.kopfhandundfuss.net/s/course/{slug.strip()}?lang=de&ts={ts_url}"
-                            yield f"{slug.strip()} @ {ts.strip()} – {erklärung.strip()}\n{url}\n\n"
-                        else:
-                            yield text
-                    else:
-                        yield text
+                # Wir geben nur den reinen Text an Streamlit weiter
+                yield chunk.text
                 
-        full_response = st.write_stream(process_and_stream())
+        full_response = st.write_stream(stream_text())
     
+    # Antwort in der Historie speichern
     st.session_state.messages.append({"role": "assistant", "content": full_response})

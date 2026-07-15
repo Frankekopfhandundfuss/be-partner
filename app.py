@@ -11,14 +11,18 @@ st.title("Transkript Assistent")
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# 2. Transkripte laden (st.cache_data sorgt dafür, dass sie nur EINMAL in den Speicher geladen werden)
+# 2. Transkripte laden (kugelsichere Methode)
 @st.cache_data
 def load_transcripts():
     text = ""
-    for file in glob.glob("**/*.vtt", recursive=True):
-        with open(file, "r", encoding="utf-8") as f:
-            text += f"\n--- Datei: {os.path.basename(file)} ---\n"
-            text += f.read()
+    # Durchsucht garantiert jeden Ordner und Unterordner
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if file.endswith(".vtt"):
+                file_path = os.path.join(root, file)
+                with open(file_path, "r", encoding="utf-8") as f:
+                    text += f"\n--- Datei: {file} ---\n"
+                    text += f.read()
     return text
 
 transcripts_text = load_transcripts()

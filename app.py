@@ -5,6 +5,7 @@ import google.generativeai as genai
 
 # Chat-UI aufbauen
 st.title("Transkript Assistent")
+st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")
 
 # 1. API-Key sicher aus den Streamlit Secrets laden
 api_key = st.secrets["GEMINI_API_KEY"]

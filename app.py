@@ -14,13 +14,14 @@ genai.configure(api_key=api_key)
 @st.cache_data
 def load_transcripts():
     text = ""
-    # Sucht nach allen Textdateien (deckt deine .vtt.txt ab)
-    for file in glob.glob("**/*.txt", recursive=True):
-        # Die requirements.txt ignorieren wir, das ist kein Transkript
-        if "requirements.txt" not in file: 
-            with open(file, "r", encoding="utf-8") as f:
-                text += f"\n--- Datei: {os.path.basename(file)} ---\n"
-                text += f.read()
+    # Wir suchen jetzt nur noch nach Dateien, die mit "video-" oder "Shorts_" beginnen
+    # Das schließt alle System-Dateien wie requirements.txt oder README.md aus!
+    dateien = [f for f in os.listdir(".") if f.endswith(".txt") and (f.startswith("video-") or f.startswith("Shorts_"))]
+    
+    for datei in dateien:
+        with open(datei, "r", encoding="utf-8") as f:
+            text += f"\n--- Datei: {datei} ---\n"
+            text += f.read()
     return text
 
 transcripts_text = load_transcripts()

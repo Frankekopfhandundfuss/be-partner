@@ -37,19 +37,12 @@ transcripts_text = load_transcripts()
 st.info(f"System-Diagnose: Es wurden {len(transcripts_text)} Zeichen geladen.")
 
 # 3. Gemini konfigurieren
-system_prompt = f"""Du bist ein Extraktions-Assistent. 
-Suche in den Transkripten nach relevanten Stellen.
+system_prompt = """Du bist ein Extraktions-Assistent. 
+Suche in den bereitgestellten Transkripten nach relevanten Stellen.
 Wenn du eine Stelle findest, gib mir NUR dieses Format aus:
 [SLUG] | [ORIGINAL_TIMESTAMP] | [ERKLÄRUNG]
 
-Beispiel:
-video-6_1 | 00:01:20.000 | Hier wird erklärt, wie das Teammeeting ablief.
-
 Wenn nichts gefunden wurde, antworte exakt: "Keine relevante Stelle in der Wissensbasis gefunden."
-Keine anderen Texte oder Erklärungen.
-
-HIER SIND DIE TRANSKRIPTE:
-{transcripts_text}
 """
 
 if "chat_session" not in st.session_state:

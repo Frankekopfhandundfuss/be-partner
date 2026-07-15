@@ -14,14 +14,21 @@ genai.configure(api_key=api_key)
 @st.cache_data
 def load_transcripts():
     text = ""
-    # Wir suchen jetzt nur noch nach Dateien, die mit "video-" oder "Shorts_" beginnen
-    # Das schließt alle System-Dateien wie requirements.txt oder README.md aus!
-    dateien = [f for f in os.listdir(".") if f.endswith(".txt") and (f.startswith("video-") or f.startswith("Shorts_"))]
+    # Wir definieren den Ordner, in dem alles liegt
+    ordner = "transkripte"
     
-    for datei in dateien:
-        with open(datei, "r", encoding="utf-8") as f:
-            text += f"\n--- Datei: {datei} ---\n"
-            text += f.read()
+    # Prüfen, ob der Ordner überhaupt existiert
+    if not os.path.exists(ordner):
+        return "Fehler: Der Ordner 'transkripte' wurde nicht gefunden."
+
+    # Wir lesen ALLE Dateien in diesem Ordner, die auf .txt enden
+    # Egal wie sie heißen, wir lesen sie ein
+    for datei in os.listdir(ordner):
+        if datei.endswith(".txt"):
+            file_path = os.path.join(ordner, datei)
+            with open(file_path, "r", encoding="utf-8") as f:
+                text += f"\n--- Datei: {datei} ---\n"
+                text += f.read()
     return text
 
 transcripts_text = load_transcripts()

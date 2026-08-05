@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import json
+import re
 import google.generativeai as genai
 
 st.title("Transkript Assistent")
@@ -83,6 +84,12 @@ system_prompt = (
     "Beantworte die Fragen der Nutzer AUSSCHLIESSLICH basierend auf den folgenden Transkripten. "
     "Wenn die Antwort in den Texten nicht zu finden ist, antworte "
     "höflich, dass dir dazu keine Informationen vorliegen.\n\n"
+    "Jede Transkript-Datei unten hat eine ID (z. B. V05). Kennzeichne am Ende JEDES "
+    "zusammenhängenden Absatzes deiner Antwort, aus welcher/welchen ID(s) die Informationen "
+    "stammen. Nutze dafür GENAU dieses Format: eckige Klammern direkt hintereinander, "
+    "z. B. [V05] oder bei mehreren Quellen [V05][V11]. Verwende NIEMALS runde Klammern oder "
+    "Kommas fuer die Zitierung, NUR das eckige-Klammer-Format. Setze den Marker nur EINMAL "
+    "am Ende des Absatzes, nicht nach jedem einzelnen Punkt.\n\n"
     f"HIER SIND DIE TRANSKRIPTE:\n{transcripts_text}"
 )
 
@@ -122,6 +129,32 @@ Wenn keine ID passt, schreibe genau: KEINE
     return [e["datei"] for e in gefundene_eintraege]
 
 
+def ersetze_quellenmarker(text, index):
+    index_by_id = {e["id"]: e for e in index}
+
+    def ein_marker(vid):
+        eintrag = index_by_id.get(vid.upper())
+        if not eintrag:
+            return ""  # unbekannte/erfundene ID -> einfach entfernen
+        return f" [🎥 {eintrag['titel']}]({eintrag['link']})"
+
+    # Fall 1: unser gewuenschtes Format, mehrere Marker direkt hintereinander: [V05][V11]
+    def ersetze_eckige_klammern(match):
+        ids = re.findall(r"V\d{2}", match.group(0))
+        return "".join(ein_marker(v) for v in ids)
+
+    text = re.sub(r"(?:\[V\d{2}\])+", ersetze_eckige_klammern, text)
+
+    # Fall 2: falls das Modell doch mal in sein altes Format zurueckfaellt: (V05, V11)
+    def ersetze_runde_klammern(match):
+        ids = re.findall(r"V\d{2}", match.group(0))
+        return "".join(ein_marker(v) for v in ids)
+
+    text = re.sub(r"\((?:\s*V\d{2}\s*,?)+\)", ersetze_runde_klammern, text)
+
+    return text
+
+
 # ---------------------------------------------------------
 # 6. Video-Links deterministisch aus dem Index bauen
 #    -> das Modell hat damit NICHTS zu tun, also keine Halluzinationsgefahr
@@ -154,22 +187,30 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("assistant"):
-        # Hauptantwort: GENAU wie im Original, die Frage geht 1:1 durch,
-        # das Modell sieht die Transkripte bereits ueber system_instruction.
+        # Hauptantwort: die Frage geht 1:1 durch, das Modell sieht die Transkripte
+        # bereits ueber system_instruction und setzt selbst Zitier-Marker.
         response = st.session_state.chat_session.send_message(prompt, stream=True)
+
+        platzhalter = st.empty()
 
         def stream_text():
             for chunk in response:
                 yield chunk.text
 
-        antwort_text = st.write_stream(stream_text())
+        with platzhalter.container():
+            antwort_roh = st.write_stream(stream_text())
 
-        # Links unten: separat ermittelt, beeinflusst die Hauptantwort nicht.
-        gefundene_dateien = finde_relevante_dateien(prompt, index)
-        links = baue_video_links(gefundene_dateien, index)
-        if links:
-            st.markdown(links)
+        antwort_final = ersetze_quellenmarker(antwort_roh, index)
 
-        full_response = antwort_text + links
+        # Fallback: falls das Modell mal gar keinen Marker gesetzt hat,
+        # ermitteln wir sicherheitshalber trotzdem die passenden Videos ueber
+        # den Router und haengen sie unten an - damit nie ganz ohne
+        # Quellenangabe geantwortet wird.
+        if antwort_final == antwort_roh:
+            gefundene_dateien = finde_relevante_dateien(prompt, index)
+            antwort_final += baue_video_links(gefundene_dateien, index)
+
+        platzhalter.markdown(antwort_final)
+        full_response = antwort_final
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})

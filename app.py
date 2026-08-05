@@ -89,7 +89,9 @@ system_prompt = (
     "Jede Transkript-Datei unten hat eine ID (z. B. V05). Kennzeichne am Ende jedes "
     "Themenblocks kurz, aus welcher/welchen ID(s) die Informationen stammen, im Format "
     "[V05] bzw. bei mehreren Quellen [V05][V11] (eckige Klammern, keine runden Klammern, "
-    "keine Kommas).\n\n"
+    "keine Kommas). Wiederhole am Ende der Antwort NICHT nochmal alle IDs/Marker in einer "
+    "zusammenfassenden Liste - die Marker gehören ausschliesslich an das Ende des jeweiligen "
+    "Themenblocks, sonst nirgends.\n\n"
     f"HIER SIND DIE TRANSKRIPTE:\n{transcripts_text}"
 )
 

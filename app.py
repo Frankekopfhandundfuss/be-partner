@@ -99,21 +99,6 @@ model = genai.GenerativeModel(
 )
 
 
-def generiere_schnell(aufruf_funktion, prompt, stream=False, thinking_level="low"):
-    """Versucht, mit reduziertem Thinking-Level zu generieren (schneller).
-    aufruf_funktion ist z. B. model.generate_content oder chat_session.send_message.
-    Faellt automatisch auf den normalen Aufruf zurueck, falls der Parameter
-    fuer dieses Modell/diese SDK-Version nicht unterstuetzt wird."""
-    try:
-        return aufruf_funktion(
-            prompt,
-            stream=stream,
-            generation_config={"thinking_config": {"thinking_level": thinking_level}},
-        )
-    except Exception:
-        return aufruf_funktion(prompt, stream=stream)
-
-
 # ---------------------------------------------------------
 # 5. Schritt A: Welche Video(s) passen zur Frage?
 #    -> NUR fuer die Link-Anzeige unten, beeinflusst NICHT die Hauptantwort.
@@ -130,7 +115,7 @@ Antworte AUSSCHLIESSLICH mit den passenden IDs (z. B. V03), kommagetrennt.
 Kein Fliesstext, keine Erklaerung, keine Dateinamen.
 Wenn keine ID passt, schreibe genau: KEINE
 """
-    response = generiere_schnell(model.generate_content, routing_prompt, thinking_level="low")
+    response = model.generate_content(routing_prompt)
     text = response.text.strip()
 
     if text.upper() == "KEINE":
@@ -204,9 +189,7 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
     with st.chat_message("assistant"):
         # Hauptantwort: die Frage geht 1:1 durch, das Modell sieht die Transkripte
         # bereits ueber system_instruction und setzt selbst Zitier-Marker.
-        response = generiere_schnell(
-            st.session_state.chat_session.send_message, prompt, stream=True, thinking_level="low"
-        )
+        response = st.session_state.chat_session.send_message(prompt, stream=True)
 
         platzhalter = st.empty()
 

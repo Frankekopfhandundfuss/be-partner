@@ -30,7 +30,7 @@ st.markdown(
     """
     <style>
     [data-testid="ScrollToBottomContainer"] {
-        overflow: hidden !important;
+        overflow: hidden;
     }
     </style>
     """,
@@ -228,23 +228,32 @@ ohne Aufzählungszeichen, ohne Anführungszeichen, ohne Erklärung.
 def ersetze_quellenmarker(text, index):
     index_by_id = {e["id"]: e for e in index}
 
-    def ein_marker(vid):
+    def ein_link(vid):
         eintrag = index_by_id.get(vid.upper())
         if not eintrag:
-            return ""  # unbekannte/erfundene ID -> einfach entfernen
-        return f" [🎥 {eintrag['titel']}]({eintrag['link']})"
+            return None  # unbekannte/erfundene ID -> einfach entfernen
+        return f"🎥 [{eintrag['titel']}]({eintrag['link']})"
+
+    def baue_empfehlungs_block(ids):
+        """Baut aus einer Liste von IDs den Empfehlungs-Block mit Einleitungssatz
+        und je einem Link pro Zeile. Gibt "" zurueck, wenn keine gueltige ID
+        uebrig bleibt (verhindert einen Einleitungssatz ohne Links)."""
+        links = [l for l in (ein_link(v) for v in ids) if l is not None]
+        if not links:
+            return ""
+        return "\n\nDazu kann ich folgende Filme empfehlen:\n" + "\n".join(links)
 
     # Fall 1: unser gewuenschtes Format, mehrere Marker direkt hintereinander: [V05][V11]
     def ersetze_eckige_klammern(match):
         ids = re.findall(r"V\d{2}", match.group(0))
-        return "".join(ein_marker(v) for v in ids)
+        return baue_empfehlungs_block(ids)
 
     text = re.sub(r"(?:\[V\d{2}\])+", ersetze_eckige_klammern, text)
 
     # Fall 2: falls das Modell doch mal in sein altes Format zurueckfaellt: (V05, V11)
     def ersetze_runde_klammern(match):
         ids = re.findall(r"V\d{2}", match.group(0))
-        return "".join(ein_marker(v) for v in ids)
+        return baue_empfehlungs_block(ids)
 
     text = re.sub(r"\((?:\s*V\d{2}\s*,?)+\)", ersetze_runde_klammern, text)
 
@@ -425,30 +434,6 @@ if st.session_state.is_streaming and st.session_state.pending_prompt:
 
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
-
-    # Scroll-Trigger: springt NICHT zu einem bestimmten Element, sondern
-    # scrollt relativ zur aktuellen Position um einen festen Pixel-Betrag
-    # nach unten - der Abstand vom (Start- oder Folge-)Fragen-Button bis zum
-    # Beginn der neuen Antwort ist strukturell immer aehnlich (Hoehe des
-    # Buttons-Blocks + kurze Nutzerfrage-Zeile), unabhaengig von der Laenge
-    # der Antwort selbst. Kombiniert mit der ScrollToBottomContainer-Regel
-    # oben (die verhindert, dass die Ansicht dem Antwort-Text beim Streamen
-    # weiter nach unten folgt), sollte die Ansicht dadurch am Anfang der
-    # neuen Antwort "haengen bleiben".
-    # PIXEL_WERT ist eine Schaetzung (kein Zugriff auf einen echten Browser
-    # hier moeglich) - ggf. nach dem ersten Test gemeinsam anpassen.
-    PIXEL_WERT = 300
-    st.components.v1.html(
-        f"""
-        <script>
-            function scrolleUmFestenBetrag(dummy) {{
-                window.parent.scrollBy({{top: {PIXEL_WERT}, behavior: "instant"}});
-            }}
-            scrolleUmFestenBetrag({len(st.session_state.messages)});
-        </script>
-        """,
-        height=0,
-    )
 
     with st.chat_message("assistant"):
         platzhalter = st.empty()

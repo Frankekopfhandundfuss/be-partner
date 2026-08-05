@@ -102,6 +102,18 @@ system_prompt = (
     "keine Kommas). Wiederhole am Ende der Antwort NICHT nochmal alle IDs/Marker in einer "
     "zusammenfassenden Liste - die Marker gehören ausschliesslich an das Ende des jeweiligen "
     "Themenblocks, sonst nirgends.\n\n"
+    "Beispiel für das gewünschte Format (nur zur Veranschaulichung des Formats, keine "
+    "echten Inhalte):\n\n"
+    "**Kommunikation mit blinden Kolleg:innen**\n"
+    "- Nonverbale Signale wie Nicken funktionieren nicht, Dinge müssen ausgesprochen werden\n"
+    "- Vor Hilfe erst fragen, ein Nein akzeptieren\n"
+    "[V01]\n\n"
+    "**Barrierefreie Meetings**\n"
+    "- Feste Sitzplätze vereinbaren, direkt mit der Person sprechen statt über sie hinweg\n"
+    "[V03][V11]\n\n"
+    "Der Marker steht dabei IMMER direkt unter dem jeweiligen Themenblock, wie oben "
+    "gezeigt - NICHT gesammelt irgendwo anders, insbesondere nicht gesammelt ganz am "
+    "Ende der gesamten Antwort.\n\n"
     f"HIER SIND DIE TRANSKRIPTE:\n{transcripts_text}"
 )
 
@@ -295,9 +307,9 @@ with st.sidebar:
 #        Anfrage (Chat-Frage oder Frage-Generierung) ausgeloest wird.
 # ---------------------------------------------------------
 st.markdown(
-    "💡 Ich kann dir Fragen zu 29 Schulungsvideos zu Blindheit, Schwerhörigkeit "
-    "und Neurodivergenz am Arbeitsplatz beantworten und dir passende Videos "
-    "verlinken. Hier ein paar Beispiele zum Einstieg:"
+    "💡 Ich kann dir Fragen zum Thema Inklusion am Arbeitsplatz beantworten und dir "
+    "passende Videos empfehlen. Bitte beachte dass ich als KI auch Fehler machen "
+    "kann. Hier ein paar Beispiele zum Einstieg:"
 )
 
 frage_spalten = st.columns(4)

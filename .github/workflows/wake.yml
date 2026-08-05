@@ -1,0 +1,31 @@
+name: Wache Streamlit App
+
+on:
+  schedule:
+    # Alle 8 Stunden - Streamlit schlaeft nach 12h Inaktivitaet ein,
+    # 8h-Rhythmus laesst genug Sicherheitsabstand.
+    - cron: "0 */8 * * *"
+  workflow_dispatch:
+    # Ermoeglicht manuelles Ausloesen ueber den "Run workflow"-Button
+    # auf GitHub, z. B. zum Testen ohne 8h zu warten.
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Playwright installieren
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: App aufrufen und ggf. wecken
+        run: python scripts/keepalive.py

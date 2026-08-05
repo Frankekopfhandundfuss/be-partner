@@ -30,7 +30,7 @@ st.markdown(
     """
     <style>
     [data-testid="ScrollToBottomContainer"] {
-        overflow: hidden;
+        overflow: hidden !important;
     }
     </style>
     """,
@@ -425,6 +425,30 @@ if st.session_state.is_streaming and st.session_state.pending_prompt:
 
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
+
+    # Scroll-Trigger: springt NICHT zu einem bestimmten Element, sondern
+    # scrollt relativ zur aktuellen Position um einen festen Pixel-Betrag
+    # nach unten - der Abstand vom (Start- oder Folge-)Fragen-Button bis zum
+    # Beginn der neuen Antwort ist strukturell immer aehnlich (Hoehe des
+    # Buttons-Blocks + kurze Nutzerfrage-Zeile), unabhaengig von der Laenge
+    # der Antwort selbst. Kombiniert mit der ScrollToBottomContainer-Regel
+    # oben (die verhindert, dass die Ansicht dem Antwort-Text beim Streamen
+    # weiter nach unten folgt), sollte die Ansicht dadurch am Anfang der
+    # neuen Antwort "haengen bleiben".
+    # PIXEL_WERT ist eine Schaetzung (kein Zugriff auf einen echten Browser
+    # hier moeglich) - ggf. nach dem ersten Test gemeinsam anpassen.
+    PIXEL_WERT = 300
+    st.components.v1.html(
+        f"""
+        <script>
+            function scrolleUmFestenBetrag(dummy) {{
+                window.parent.scrollBy({{top: {PIXEL_WERT}, behavior: "instant"}});
+            }}
+            scrolleUmFestenBetrag({len(st.session_state.messages)});
+        </script>
+        """,
+        height=0,
+    )
 
     with st.chat_message("assistant"):
         platzhalter = st.empty()

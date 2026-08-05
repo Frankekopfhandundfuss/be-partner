@@ -81,6 +81,21 @@ if fehlende_dateien:
 model = genai.GenerativeModel(MODELL_NAME)
 
 
+def generiere_schnell(aufruf_funktion, prompt, stream=False, thinking_level="low"):
+    """Versucht, mit reduziertem Thinking-Level zu generieren (schneller).
+    aufruf_funktion ist z. B. model.generate_content oder chat_session.send_message.
+    Faellt automatisch auf den normalen Aufruf zurueck, falls der Parameter
+    fuer dieses Modell/diese SDK-Version nicht unterstuetzt wird."""
+    try:
+        return aufruf_funktion(
+            prompt,
+            stream=stream,
+            generation_config={"thinking_config": {"thinking_level": thinking_level}},
+        )
+    except Exception:
+        return aufruf_funktion(prompt, stream=stream)
+
+
 # ---------------------------------------------------------
 # 4. Schritt A: Welche Datei(en) passen zur Frage?
 #    -> eigener, GEDAECHTNISLOSER Aufruf (bewusst ohne Chat-Historie),
@@ -100,7 +115,7 @@ Antworte AUSSCHLIESSLICH mit den passenden IDs (z. B. V03), kommagetrennt.
 Kein Fliesstext, keine Erklaerung, keine Dateinamen.
 Wenn keine ID passt, schreibe genau: KEINE
 """
-    response = model.generate_content(prompt)
+    response = generiere_schnell(model.generate_content, prompt, thinking_level="low")
     text = response.text.strip()
 
     if text.upper() == "KEINE":
@@ -170,7 +185,9 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
                 "Zu dieser Frage liegt kein passendes Transkript vor. "
                 "Antworte kurz und ehrlich, dass dir dazu keine Informationen vorliegen."
             )
-            response = st.session_state.chat_session.send_message(hinweis_prompt, stream=True)
+            response = generiere_schnell(
+                st.session_state.chat_session.send_message, hinweis_prompt, stream=True, thinking_level="low"
+            )
 
             def stream_text():
                 for chunk in response:
@@ -188,9 +205,11 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
 Transkript-Ausschnitten unten. Wenn die Antwort darin nicht zu finden ist, sag ehrlich,
 dass dir dazu keine Informationen vorliegen.
 
-Kennzeichne WICHTIG bei jedem Punkt/Absatz deiner Antwort direkt im Text, aus welcher
-Quelle diese Information stammt. Setze dazu genau an die passende Stelle im Fliesstext
-den kurzen Marker der Quelle in eckigen Klammern, z. B. [{gefundene_eintraege[0]['id']}].
+Kennzeichne die Quelle NICHT nach jedem einzelnen Aufzaehlungspunkt, sondern nur EINMAL
+am Ende jedes zusammenhaengenden Absatzes bzw. thematischen Abschnitts. Setze dazu den
+kurzen Marker der Quelle in eckigen Klammern an das Ende des Absatzes, z. B. [{gefundene_eintraege[0]['id']}].
+Wenn ein Absatz Informationen aus mehreren Quellen zusammenfasst, nenne alle passenden
+IDs direkt hintereinander, z. B. [{gefundene_eintraege[0]['id']}][{gefundene_eintraege[0]['id']}].
 Nutze dafuer AUSSCHLIESSLICH diese Quell-IDs: {gueltige_ids}
 Erfinde KEINE eigenen IDs, nenne KEINE Dateinamen oder Links - das erledigt die Anwendung
 automatisch anhand deiner Marker.
@@ -200,7 +219,9 @@ TRANSKRIPTE:
 
 FRAGE: {prompt}
 """
-            response = st.session_state.chat_session.send_message(erweiterter_prompt, stream=True)
+            response = generiere_schnell(
+                st.session_state.chat_session.send_message, erweiterter_prompt, stream=True, thinking_level="low"
+            )
 
             platzhalter = st.empty()
 

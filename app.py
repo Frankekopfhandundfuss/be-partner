@@ -84,15 +84,12 @@ system_prompt = (
     "Beantworte die Fragen der Nutzer AUSSCHLIESSLICH basierend auf den folgenden Transkripten. "
     "Wenn die Antwort in den Texten nicht zu finden ist, antworte "
     "höflich, dass dir dazu keine Informationen vorliegen.\n\n"
-    "Formatiere deine Antwort grundsätzlich in knappen Stichpunkten (Zeilen beginnend mit '-'), "
-    "gruppiert unter kurzen Zwischenüberschriften je Thema. Vermeide lange Fließtext-Absätze - "
-    "fasse zusammen, statt auszuformulieren.\n\n"
-    "Jede Transkript-Datei unten hat eine ID (z. B. V05). Kennzeichne am Ende JEDES "
-    "thematischen Stichpunkt-Blocks (nach der letzten Stichpunkt-Zeile zu diesem Thema), aus "
-    "welcher/welchen ID(s) die Informationen stammen. Nutze dafür GENAU dieses Format: eckige "
-    "Klammern direkt hintereinander, z. B. [V05] oder bei mehreren Quellen [V05][V11]. Verwende "
-    "NIEMALS runde Klammern oder Kommas fuer die Zitierung, NUR das eckige-Klammer-Format. Setze "
-    "den Marker nur EINMAL pro Themenblock, nicht nach jedem einzelnen Stichpunkt.\n\n"
+    "Nutze wo sinnvoll knappe Stichpunkte statt langer Fließtext-Absätze, gruppiert unter "
+    "kurzen Zwischenüberschriften je Thema.\n\n"
+    "Jede Transkript-Datei unten hat eine ID (z. B. V05). Kennzeichne am Ende jedes "
+    "Themenblocks kurz, aus welcher/welchen ID(s) die Informationen stammen, im Format "
+    "[V05] bzw. bei mehreren Quellen [V05][V11] (eckige Klammern, keine runden Klammern, "
+    "keine Kommas).\n\n"
     f"HIER SIND DIE TRANSKRIPTE:\n{transcripts_text}"
 )
 
@@ -100,6 +97,21 @@ model = genai.GenerativeModel(
     model_name=MODELL_NAME,
     system_instruction=system_prompt,
 )
+
+
+def generiere_schnell(aufruf_funktion, prompt, stream=False, thinking_level="low"):
+    """Versucht, mit reduziertem Thinking-Level zu generieren (schneller).
+    aufruf_funktion ist z. B. model.generate_content oder chat_session.send_message.
+    Faellt automatisch auf den normalen Aufruf zurueck, falls der Parameter
+    fuer dieses Modell/diese SDK-Version nicht unterstuetzt wird."""
+    try:
+        return aufruf_funktion(
+            prompt,
+            stream=stream,
+            generation_config={"thinking_config": {"thinking_level": thinking_level}},
+        )
+    except Exception:
+        return aufruf_funktion(prompt, stream=stream)
 
 
 # ---------------------------------------------------------
@@ -118,7 +130,7 @@ Antworte AUSSCHLIESSLICH mit den passenden IDs (z. B. V03), kommagetrennt.
 Kein Fliesstext, keine Erklaerung, keine Dateinamen.
 Wenn keine ID passt, schreibe genau: KEINE
 """
-    response = model.generate_content(routing_prompt)
+    response = generiere_schnell(model.generate_content, routing_prompt, thinking_level="low")
     text = response.text.strip()
 
     if text.upper() == "KEINE":
@@ -192,7 +204,9 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
     with st.chat_message("assistant"):
         # Hauptantwort: die Frage geht 1:1 durch, das Modell sieht die Transkripte
         # bereits ueber system_instruction und setzt selbst Zitier-Marker.
-        response = st.session_state.chat_session.send_message(prompt, stream=True)
+        response = generiere_schnell(
+            st.session_state.chat_session.send_message, prompt, stream=True, thinking_level="low"
+        )
 
         platzhalter = st.empty()
 

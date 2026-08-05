@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 import json
-import re
 import google.generativeai as genai
 
 st.title("Transkript Assistent")
@@ -81,30 +80,13 @@ if fehlende_dateien:
 model = genai.GenerativeModel(MODELL_NAME)
 
 
-def generiere_schnell(aufruf_funktion, prompt, stream=False, thinking_level="low"):
-    """Versucht, mit reduziertem Thinking-Level zu generieren (schneller).
-    aufruf_funktion ist z. B. model.generate_content oder chat_session.send_message.
-    Faellt automatisch auf den normalen Aufruf zurueck, falls der Parameter
-    fuer dieses Modell/diese SDK-Version nicht unterstuetzt wird."""
-    try:
-        return aufruf_funktion(
-            prompt,
-            stream=stream,
-            generation_config={"thinking_config": {"thinking_level": thinking_level}},
-        )
-    except Exception:
-        return aufruf_funktion(prompt, stream=stream)
-
-
 # ---------------------------------------------------------
 # 4. Schritt A: Welche Datei(en) passen zur Frage?
 #    -> eigener, GEDAECHTNISLOSER Aufruf (bewusst ohne Chat-Historie),
 #       damit das Routing nicht mit jeder neuen Frage langsamer/teurer wird.
 #       Die eigentliche Antwort (Schritt B) hat das Gedaechtnis.
-#    -> Rueckgabe sind jetzt die vollen Index-Eintraege (nicht nur Dateinamen),
-#       weil wir gleich sowohl ID als auch Dateiname/Link brauchen.
 # ---------------------------------------------------------
-def finde_relevante_eintraege(frage, index):
+def finde_relevante_dateien(frage, index):
     prompt = f"""Hier ist eine Liste von Videos mit ID, Titel und Themen:
 
 {index_uebersicht(index)}
@@ -115,7 +97,7 @@ Antworte AUSSCHLIESSLICH mit den passenden IDs (z. B. V03), kommagetrennt.
 Kein Fliesstext, keine Erklaerung, keine Dateinamen.
 Wenn keine ID passt, schreibe genau: KEINE
 """
-    response = generiere_schnell(model.generate_content, prompt, thinking_level="low")
+    response = model.generate_content(prompt)
     text = response.text.strip()
 
     if text.upper() == "KEINE":
@@ -125,30 +107,16 @@ Wenn keine ID passt, schreibe genau: KEINE
     index_by_id = {e["id"]: e for e in index}
     # Nur IDs akzeptieren, die WIRKLICH im Index existieren
     # -> verhindert, dass eine "erfundene" ID durchrutscht
-    return [index_by_id[k] for k in kandidaten if k in index_by_id]
+    gefundene_eintraege = [index_by_id[k] for k in kandidaten if k in index_by_id]
+    return [e["datei"] for e in gefundene_eintraege]
 
 
 # ---------------------------------------------------------
-# 5. Quellen-Marker im Antworttext durch echte Links ersetzen
-#    -> das Modell schreibt nur [V07] an die richtige Stelle im Fliesstext,
-#       der Code loest das erst danach in einen echten Link auf.
-#       Unbekannte/erfundene IDs werden stillschweigend entfernt statt
-#       einen falschen Link zu zeigen.
+# 5. Video-Links deterministisch aus dem Index bauen
+#    -> das Modell hat damit NICHTS zu tun, also keine Halluzinationsgefahr
 # ---------------------------------------------------------
-def ersetze_quellenmarker(text, eintraege):
-    index_by_id = {e["id"]: e for e in eintraege}
-
-    def ersetzung(match):
-        vid = match.group(1).upper()
-        eintrag = index_by_id.get(vid)
-        if not eintrag:
-            return ""  # unbekannte/erfundene ID -> einfach entfernen
-        return f"\n\n**🎥 [{eintrag['titel']}]({eintrag['link']})**\n"
-
-    return re.sub(r"\[(V\d{2})\]", ersetzung, text)
-
-
-def baue_video_links(eintraege):
+def baue_video_links(dateien, index):
+    eintraege = [e for e in index if e["datei"] in dateien]
     if not eintraege:
         return ""
     links = [f"🎥 [{e['titel']}]({e['link']})" for e in eintraege]
@@ -175,9 +143,9 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("assistant"):
-        gefundene_eintraege = finde_relevante_eintraege(prompt, index)
+        gefundene_dateien = finde_relevante_dateien(prompt, index)
 
-        if not gefundene_eintraege:
+        if not gefundene_dateien:
             # Kein passendes Video -> trotzdem an die Chat-Session schicken,
             # damit der Gespraechsverlauf konsistent bleibt (z. B. Folgefragen).
             hinweis_prompt = (
@@ -185,9 +153,7 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
                 "Zu dieser Frage liegt kein passendes Transkript vor. "
                 "Antworte kurz und ehrlich, dass dir dazu keine Informationen vorliegen."
             )
-            response = generiere_schnell(
-                st.session_state.chat_session.send_message, hinweis_prompt, stream=True, thinking_level="low"
-            )
+            response = st.session_state.chat_session.send_message(hinweis_prompt, stream=True)
 
             def stream_text():
                 for chunk in response:
@@ -196,53 +162,30 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
             full_response = st.write_stream(stream_text())
         else:
             volltext = ""
-            for e in gefundene_eintraege:
-                volltext += f"\n--- Quelle {e['id']} (Thema: {e['titel']}) ---\n"
-                volltext += load_transcript(e["datei"])
+            for datei in gefundene_dateien:
+                volltext += f"\n--- {datei} ---\n"
+                volltext += load_transcript(datei)
 
-            gueltige_ids = ", ".join(e["id"] for e in gefundene_eintraege)
-            erweiterter_prompt = f"""Beantworte die folgende Frage AUSSCHLIESSLICH basierend auf den
-Transkript-Ausschnitten unten.
+            erweiterter_prompt = f"""Beantworte die folgende Frage AUSSCHLIESSLICH basierend auf dem
+Transkript-Ausschnitt unten. Wenn die Antwort darin nicht zu finden ist, sag ehrlich,
+dass dir dazu keine Informationen vorliegen. Gib KEINE Links oder Dateinamen in deiner
+Antwort an - das erledigt die Anwendung automatisch.
 
-Arbeite die Quellen NACHEINANDER ab, in genau dieser Reihenfolge: {gueltige_ids}
-Verweb die Inhalte NICHT thematisch miteinander. Beginne fuer JEDE Quelle einen eigenen
-Abschnitt und setze GANZ AM ANFANG dieses Abschnitts genau einmal den Marker der Quelle
-in eckigen Klammern (z. B. [{gefundene_eintraege[0]['id']}]). Danach fasse knapp zusammen,
-was in genau diesem Video zur Frage relevant ist. Kein weiterer Marker innerhalb des
-Abschnitts noetig.
-Wenn eine Quelle nichts Relevantes zur Frage enthaelt, lass ihren Abschnitt einfach weg.
-Wenn KEINE der Quellen etwas Relevantes enthaelt, sag ehrlich, dass dir dazu keine
-Informationen vorliegen.
-Nenne KEINE Dateinamen oder Links selbst - das erledigt die Anwendung automatisch anhand
-deiner Marker.
-
-TRANSKRIPTE:
+TRANSKRIPT:
 {volltext}
 
 FRAGE: {prompt}
 """
-            response = generiere_schnell(
-                st.session_state.chat_session.send_message, erweiterter_prompt, stream=True, thinking_level="low"
-            )
-
-            platzhalter = st.empty()
+            response = st.session_state.chat_session.send_message(erweiterter_prompt, stream=True)
 
             def stream_text():
                 for chunk in response:
                     yield chunk.text
 
-            with platzhalter.container():
-                antwort_roh = st.write_stream(stream_text())
-
-            antwort_final = ersetze_quellenmarker(antwort_roh, gefundene_eintraege)
-
-            # Fallback: falls das Modell doch keinen einzigen Marker gesetzt hat,
-            # haengen wir die Links sicherheitshalber trotzdem unten an,
-            # damit nie ganz ohne Quellenangabe geantwortet wird.
-            if antwort_final == antwort_roh:
-                antwort_final += baue_video_links(gefundene_eintraege)
-
-            platzhalter.markdown(antwort_final)
-            full_response = antwort_final
+            antwort_text = st.write_stream(stream_text())
+            links = baue_video_links(gefundene_dateien, index)
+            if links:
+                st.markdown(links)
+            full_response = antwort_text + links
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})

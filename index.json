@@ -1,0 +1,353 @@
+[
+  {
+    "id": "V01",
+    "datei": "video-1_2 - Gespräch Alla2 - de.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/im-gespraech-mit-alla",
+    "titel": "Im Gespräch mit Alla",
+    "themen": [
+      "Blindheit",
+      "Kommunikation mit blinden Menschen",
+      "Onboarding",
+      "Hilfe anbieten",
+      "Sprachgebrauch"
+    ]
+  },
+  {
+    "id": "V02",
+    "datei": "video-3_2 - Herr Gustave und sein Arbeitsplatz - de.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/herr-gustave-und-sein-arbeitsplatz",
+    "titel": "Herr Gustave und sein Arbeitsplatz",
+    "themen": [
+      "Blindheit",
+      "Barrierefreier Arbeitsplatz",
+      "Braille-Zeile",
+      "Screenreader",
+      "Beleuchtung",
+      "Sehbehinderung"
+    ]
+  },
+  {
+    "id": "V03",
+    "datei": "video-6_3 - Anna im ersten Team-Meeting - de.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/anna-im-ersten-team-meeting",
+    "titel": "Anna im ersten Team-Meeting",
+    "themen": [
+      "Blindheit",
+      "Meetings",
+      "Barrierefreie Präsentation",
+      "Sitzplatz",
+      "Team"
+    ]
+  },
+  {
+    "id": "V04",
+    "datei": "Schwerhörigkeit Einführung_1.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/schwerhoerigkeit-einfuehrung",
+    "titel": "Schwerhörigkeit: Einführung 1",
+    "themen": [
+      "Schwerhörigkeit",
+      "Hörgerät",
+      "Grundlagen"
+    ]
+  },
+  {
+    "id": "V05",
+    "datei": "Schwerhörig Einführung_2.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/schwerhoerigkeit-einfuehrung-2",
+    "titel": "Schwerhörigkeit: Einführung 2",
+    "themen": [
+      "Schwerhörigkeit",
+      "Reizüberflutung",
+      "Praxistipps",
+      "Kommunikation"
+    ]
+  },
+  {
+    "id": "V06",
+    "datei": "Schwerhörigkeit Einführung_3.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/schwerhoerigkeit-einfuehrung-3",
+    "titel": "Schwerhörigkeit: Einführung 3",
+    "themen": [
+      "Schwerhörigkeit",
+      "Lippenlesen"
+    ]
+  },
+  {
+    "id": "V07",
+    "datei": "Meeting Schwerhörigkeit _1.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/meeting-mit-schwerhoerigkeit-1",
+    "titel": "Meeting mit Schwerhörigkeit 1",
+    "themen": [
+      "Schwerhörigkeit",
+      "Meetings",
+      "Einleitung"
+    ]
+  },
+  {
+    "id": "V08",
+    "datei": "Meeting Schwerhörigkeit_2.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/meeting-mit-schwerhoerigkeit-2",
+    "titel": "Meeting mit Schwerhörigkeit 2",
+    "themen": [
+      "Schwerhörigkeit",
+      "Meetings",
+      "Moderation",
+      "Sprecherwechsel",
+      "Lippenlesen"
+    ]
+  },
+  {
+    "id": "V09",
+    "datei": "Meeting Schwerhörigkeit _3.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/meeting-mit-schwerhoerigkeit-3",
+    "titel": "Meeting mit Schwerhörigkeit 3",
+    "themen": [
+      "Schwerhörigkeit",
+      "Meetings",
+      "Mikrofon",
+      "Live-Untertitel"
+    ]
+  },
+  {
+    "id": "V10",
+    "datei": "Meeting Schwerhörigkeit_4.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/meeting-mit-schwerhoerigkeit-4",
+    "titel": "Meeting mit Schwerhörigkeit 4",
+    "themen": [
+      "Schwerhörigkeit",
+      "Meetings",
+      "Sitzordnung",
+      "Raumakustik",
+      "Licht"
+    ]
+  },
+  {
+    "id": "V11",
+    "datei": "Meeting Schwerhörigkeit online_5.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/meeting-mit-schwerhoerigkeit-online-5",
+    "titel": "Meeting mit Schwerhörigkeit online 5",
+    "themen": [
+      "Schwerhörigkeit",
+      "Meetings",
+      "Homeoffice",
+      "Video-Calls",
+      "Untertitel"
+    ]
+  },
+  {
+    "id": "V12",
+    "datei": "Meeting Schwerhörigkeit Zusammenfassung.vtt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/meeting-mit-schwerhoerigkeit-zusammenfassung",
+    "titel": "Meeting mit Schwerhörigkeit: Zusammenfassung",
+    "themen": [
+      "Schwerhörigkeit",
+      "Meetings",
+      "Checkliste",
+      "Zusammenfassung"
+    ]
+  },
+  {
+    "id": "V13",
+    "datei": "video-3_3 - Piepshow - de.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/piepshow",
+    "titel": "Piepshow",
+    "themen": [
+      "Tinnitus",
+      "Stress",
+      "Akustik",
+      "Pausen"
+    ]
+  },
+  {
+    "id": "V14",
+    "datei": "video-1_1 - Was ist Neurodiversität - de.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/was-ist-neurodiversitaet",
+    "titel": "Was ist Neurodiversität?",
+    "themen": [
+      "Neurodivergenz",
+      "Überblick",
+      "Autismus",
+      "ADHS",
+      "Dyspraxie",
+      "Dyslexie",
+      "Dyskalkulie",
+      "Synästhesie",
+      "Tourette"
+    ]
+  },
+  {
+    "id": "V15",
+    "datei": "video-6_1 - Neurodivergenz im Teammeeting - de.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/neurodivergenz-im-teammeeting",
+    "titel": "Neurodivergenz im Teammeeting",
+    "themen": [
+      "Neurodivergenz",
+      "Autismus",
+      "ADHS",
+      "Meetings",
+      "Praxisbeispiel"
+    ]
+  },
+  {
+    "id": "V16",
+    "datei": "Shorts_Autisten bevorzugen.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/autisten-bevorzugen",
+    "titel": "Autisten bevorzugen",
+    "themen": [
+      "Autismus",
+      "Struktur",
+      "Schriftliche Aufträge"
+    ]
+  },
+  {
+    "id": "V17",
+    "datei": "Shorts_Autisten brauchen.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/autisten-brauchen",
+    "titel": "Autisten brauchen",
+    "themen": [
+      "Autismus",
+      "Routine",
+      "Diagramme",
+      "Visuelle Hilfsmittel"
+    ]
+  },
+  {
+    "id": "V18",
+    "datei": "Shorts_Autisten wissen wegen.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/autisten-wissen-wegen",
+    "titel": "Autisten wissen wegen",
+    "themen": [
+      "Autismus",
+      "Kommunikationsregeln",
+      "Feedback"
+    ]
+  },
+  {
+    "id": "V19",
+    "datei": "Shorts_In der Kommunikation.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/in-der-kommunikation",
+    "titel": "In der Kommunikation",
+    "themen": [
+      "Autismus",
+      "Direkte Kommunikation",
+      "Sarkasmus"
+    ]
+  },
+  {
+    "id": "V20",
+    "datei": "Shorts_fehlender Augenkontakt.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/fehlender-augenkontakt",
+    "titel": "Fehlender Augenkontakt",
+    "themen": [
+      "Autismus",
+      "Augenkontakt",
+      "Körpersprache"
+    ]
+  },
+  {
+    "id": "V21",
+    "datei": "Shorts_Bei viele Menschen mit ADHS.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/bei-vielen-menschen-mit-adhs",
+    "titel": "Bei vielen Menschen mit ADHS",
+    "themen": [
+      "ADHS",
+      "Meetings",
+      "Agenda",
+      "Visualisierung"
+    ]
+  },
+  {
+    "id": "V22",
+    "datei": "Shorts_Wenn Menschen mit ADHS.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/wenn-menschen-mit-adhs",
+    "titel": "Wenn Menschen mit ADHS",
+    "themen": [
+      "ADHS",
+      "Hyperfokus",
+      "Burnout"
+    ]
+  },
+  {
+    "id": "V23",
+    "datei": "Shorts_Lesen ist ein Problem.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/lesen-ist-ein-problem",
+    "titel": "Lesen ist ein Problem",
+    "themen": [
+      "Legasthenie",
+      "Dyslexie",
+      "Schriftart",
+      "Open Dyslexia"
+    ]
+  },
+  {
+    "id": "V24",
+    "datei": "Shorts_lange Texte.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/lange-texte",
+    "titel": "Lange Texte",
+    "themen": [
+      "Legasthenie",
+      "Dyslexie",
+      "Vorleseprogramme",
+      "Diktiersoftware"
+    ]
+  },
+  {
+    "id": "V25",
+    "datei": "Shorts_Das ständige Summen.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/das-staendige-summen",
+    "titel": "Das ständige Summen",
+    "themen": [
+      "Reizüberflutung",
+      "Bürogeräusche",
+      "Noise-Cancelling",
+      "Licht"
+    ]
+  },
+  {
+    "id": "V26",
+    "datei": "Shorts_der weg zur Arbeit.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/der-weg-zur-arbeit",
+    "titel": "Der Weg zur Arbeit",
+    "themen": [
+      "Arbeitsweg",
+      "Gleitzeit",
+      "Homeoffice",
+      "Reizüberflutung"
+    ]
+  },
+  {
+    "id": "V27",
+    "datei": "Shorts_Wer den ganzen Tag.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/wer-den-ganzen-tag",
+    "titel": "Wer den ganzen Tag",
+    "themen": [
+      "Masking",
+      "Erschöpfung",
+      "Burnout",
+      "Neurodivergenz"
+    ]
+  },
+  {
+    "id": "V28",
+    "datei": "Shorts_Maßnahmen werden oft.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/massnahmen-werden-oft",
+    "titel": "Maßnahmen werden oft",
+    "themen": [
+      "Mitbestimmung",
+      "Individuelle Bedarfsklärung",
+      "Neurodivergenz"
+    ]
+  },
+  {
+    "id": "V29",
+    "datei": "Klassische Bewerbungsgespräche.vtt.txt",
+    "link": "https://bepartner-test.kopfhandundfuss.net/s/course/klassische-bewerbungsgespraeche",
+    "titel": "Klassische Bewerbungsgespräche",
+    "themen": [
+      "Bewerbung",
+      "Recruiting",
+      "Vorstellungsgespräch",
+      "Neurodivergenz"
+    ]
+  }
+]

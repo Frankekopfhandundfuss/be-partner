@@ -311,39 +311,67 @@ with st.sidebar:
 #        Grund: verhindert, dass waehrend einer laufenden Antwort eine zweite
 #        Anfrage (Chat-Frage oder Frage-Generierung) ausgeloest wird.
 # ---------------------------------------------------------
+# ---------------------------------------------------------
+# 4b. Begruessungstext + Beispielfragen-Buttons
+#     -> bewusst dauerhaft sichtbar (nicht nur beim Start), Nutzerentscheidung.
+#     -> Klick auf eine Beispielfrage geht ueber GENAU DENSELBEN Pfad wie eine
+#        normale st.chat_input-Eingabe (pending_prompt + is_streaming + rerun),
+#        damit der IncompleteIterationError-Fix nicht durch einen zweiten,
+#        abweichenden Eingabeweg umgangen wird.
+#     -> Alle Buttons werden waehrend is_streaming gesperrt, aus demselben
+#        Grund: verhindert, dass waehrend einer laufenden Antwort eine zweite
+#        Anfrage (Chat-Frage oder Frage-Generierung) ausgeloest wird.
+#     -> In eine Funktion ausgelagert, weil der Block ZWEIMAL angezeigt wird:
+#        einmal oben (Einstieg) und einmal direkt nach der neuesten Antwort
+#        (siehe Aufruf nach der Nachrichtenschleife weiter unten) - damit man
+#        nach jeder Antwort nicht mehr nach oben scrollen muss, um eine neue
+#        Beispielfrage auszuwaehlen oder neue generieren zu lassen. Beide
+#        Instanzen zeigen/aendern denselben session_state, sind also immer
+#        synchron - kein doppelter Zustand.
+# ---------------------------------------------------------
+def zeige_beispielfragen_buttons(key_suffix):
+    frage_spalten = st.columns(4)
+    for i, frage in enumerate(st.session_state.beispielfragen):
+        with frage_spalten[i]:
+            if st.button(
+                frage,
+                key=f"beispielfrage_{i}_{key_suffix}",
+                disabled=st.session_state.is_streaming,
+                use_container_width=True,
+            ):
+                st.session_state.pending_prompt = frage
+                st.session_state.is_streaming = True
+                st.rerun()
+
+    if st.button(
+        "🔄 Generiere 4 neue Fragen",
+        key=f"neue_fragen_generieren_{key_suffix}",
+        disabled=st.session_state.is_streaming,
+    ):
+        st.session_state.frage_generierung_angefordert = True
+        st.session_state.is_streaming = True
+        st.rerun()
+
+
 st.markdown(
     "💡 Ich kann dir Fragen zum Thema Inklusion am Arbeitsplatz beantworten und dir "
     "passende Videos empfehlen. Bitte beachte dass ich als KI auch Fehler machen "
     "kann. Hier ein paar Beispiele zum Einstieg:"
 )
-
-frage_spalten = st.columns(4)
-for i, frage in enumerate(st.session_state.beispielfragen):
-    with frage_spalten[i]:
-        if st.button(
-            frage,
-            key=f"beispielfrage_{i}",
-            disabled=st.session_state.is_streaming,
-            use_container_width=True,
-        ):
-            st.session_state.pending_prompt = frage
-            st.session_state.is_streaming = True
-            st.rerun()
-
-if st.button(
-    "🔄 Generiere 4 neue Fragen",
-    key="neue_fragen_generieren",
-    disabled=st.session_state.is_streaming,
-):
-    st.session_state.frage_generierung_angefordert = True
-    st.session_state.is_streaming = True
-    st.rerun()
+zeige_beispielfragen_buttons(key_suffix="oben")
 
 st.divider()
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+
+# Zweite Instanz des Buttons-Blocks: nur wenn schon ein Gespraech laeuft,
+# direkt nach der neuesten Antwort - genau das, was den Scroll-nach-oben
+# ueberfluessig macht.
+if st.session_state.messages:
+    st.caption("Weiter geht's zum Beispiel mit:")
+    zeige_beispielfragen_buttons(key_suffix="unten")
 
 neue_eingabe = st.chat_input(
     "Stell mir eine Frage zu den Transkripten...",

@@ -172,6 +172,28 @@ def baue_video_links(dateien, index):
 # ---------------------------------------------------------
 # 7. Chat-Session im Hintergrund am Leben halten (Gedaechtnis!)
 #    -> genau wie im Original: start_chat + history in session_state
+#
+#    ERWEITERT (siehe PROJEKT_STAND.md fuer den Hintergrund):
+#    Google's stream=True-Antworten sind "lazy" - erst wenn die Chunk-
+#    Iteration KOMPLETT durchlaufen ist, ist die Antwort intern fertig
+#    aufgeloest. Wenn Streamlit einen laufenden Skriptdurchlauf mitten in
+#    dieser Iteration abbricht (z. B. weil der Nutzer schon die naechste
+#    Frage abschickt, waehrend die vorherige noch streamt), bleibt die
+#    kaputte Antwort in chat_session.history stehen. JEDE folgende
+#    send_message()-Anfrage crasht dann mit IncompleteIterationError, weil
+#    sie beim Aufbau der Anfrage die History liest.
+#
+#    Ebene 1 (Eingabesperre): Eingabefeld wird gesperrt, waehrend eine
+#    Antwort verarbeitet wird - verhindert den Abbruch von vornherein.
+#    WICHTIG: disabled=... an st.chat_input wird erst im naechsten
+#    Durchlauf sichtbar, nicht im selben, in dem man die Anfrage startet -
+#    deshalb der Zwischenschritt ueber "pending_prompt" + rerun().
+#
+#    Ebene 2 (Fehlerbehandlung): Falls es trotzdem zu einem Fehler kommt
+#    (dieser oder ein anderer), faengt try/except ihn ab, zeigt eine
+#    freundliche Meldung statt Traceback und setzt die chat_session neu
+#    auf - das kostet dem Modell den bisherigen Gespraechskontext, haelt
+#    die App aber stabil statt komplett abzustuerzen.
 # ---------------------------------------------------------
 if "chat_session" not in st.session_state:
     st.session_state.chat_session = model.start_chat(history=[])
@@ -179,40 +201,95 @@ if "chat_session" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+if "is_streaming" not in st.session_state:
+    st.session_state.is_streaming = False
+
+if "pending_prompt" not in st.session_state:
+    st.session_state.pending_prompt = None
+
+with st.sidebar:
+    st.caption(
+        "Falls die App mal haengen bleibt (Eingabefeld dauerhaft "
+        "gesperrt, z. B. nach einem Browser-Refresh mitten in einer "
+        "Antwort), hilft ein Klick hier:"
+    )
+    if st.button("Sitzung zurücksetzen"):
+        st.session_state.chat_session = model.start_chat(history=[])
+        st.session_state.messages = []
+        st.session_state.is_streaming = False
+        st.session_state.pending_prompt = None
+        st.rerun()
+
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
+neue_eingabe = st.chat_input(
+    "Stell mir eine Frage zu den Transkripten...",
+    disabled=st.session_state.is_streaming,
+)
+
+# Schritt 1: neue Eingabe kommt an, und wir sind noch nicht beschaeftigt
+# -> Prompt merken, Feld sperren, rerun. Erst danach (im naechsten
+# Durchlauf) starten wir die eigentliche, langsamere Modellanfrage - so
+# sieht der Nutzer das gesperrte Feld auch tatsaechlich waehrenddessen.
+if neue_eingabe and not st.session_state.is_streaming:
+    st.session_state.pending_prompt = neue_eingabe
+    st.session_state.is_streaming = True
+    st.rerun()
+
+# Schritt 2: es liegt eine zu verarbeitende Frage vor -> jetzt an das
+# Modell schicken, mit Fehlerbehandlung (Ebene 2).
+if st.session_state.is_streaming and st.session_state.pending_prompt:
+    prompt = st.session_state.pending_prompt
 
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("assistant"):
-        # Hauptantwort: die Frage geht 1:1 durch, das Modell sieht die Transkripte
-        # bereits ueber system_instruction und setzt selbst Zitier-Marker.
-        response = st.session_state.chat_session.send_message(prompt, stream=True)
-
         platzhalter = st.empty()
 
-        def stream_text():
-            for chunk in response:
-                yield chunk.text
+        try:
+            # Hauptantwort: die Frage geht 1:1 durch, das Modell sieht die
+            # Transkripte bereits ueber system_instruction und setzt selbst
+            # Zitier-Marker.
+            response = st.session_state.chat_session.send_message(prompt, stream=True)
 
-        with platzhalter.container():
-            antwort_roh = st.write_stream(stream_text())
+            def stream_text():
+                for chunk in response:
+                    yield chunk.text
 
-        antwort_final = ersetze_quellenmarker(antwort_roh, index)
+            with platzhalter.container():
+                antwort_roh = st.write_stream(stream_text())
 
-        # Fallback: falls das Modell mal gar keinen Marker gesetzt hat,
-        # ermitteln wir sicherheitshalber trotzdem die passenden Videos ueber
-        # den Router und haengen sie unten an - damit nie ganz ohne
-        # Quellenangabe geantwortet wird.
-        if antwort_final == antwort_roh:
-            gefundene_dateien = finde_relevante_dateien(prompt, index)
-            antwort_final += baue_video_links(gefundene_dateien, index)
+            antwort_final = ersetze_quellenmarker(antwort_roh, index)
 
-        platzhalter.markdown(antwort_final)
-        full_response = antwort_final
+            # Fallback: falls das Modell mal gar keinen Marker gesetzt hat,
+            # ermitteln wir sicherheitshalber trotzdem die passenden Videos
+            # ueber den Router und haengen sie unten an - damit nie ganz
+            # ohne Quellenangabe geantwortet wird.
+            if antwort_final == antwort_roh:
+                gefundene_dateien = finde_relevante_dateien(prompt, index)
+                antwort_final += baue_video_links(gefundene_dateien, index)
+
+            platzhalter.markdown(antwort_final)
+            full_response = antwort_final
+
+        except Exception:
+            # Bekannter Fall: die chat_session ist in einem kaputten
+            # Zustand (z. B. IncompleteIterationError nach einer
+            # abgebrochenen vorherigen Antwort). Session neu aufsetzen,
+            # damit die naechste Frage wieder funktioniert, statt dass die
+            # App bei JEDER weiteren Anfrage abstuerzt.
+            st.session_state.chat_session = model.start_chat(history=[])
+            full_response = (
+                "⚠️ Die letzte Antwort wurde unterbrochen, daher musste "
+                "die Sitzung neu gestartet werden. Bitte stelle deine "
+                "Frage einfach nochmal - der bisherige Gesprächsverlauf "
+                "ist dem Modell dabei leider nicht mehr bekannt."
+            )
+            platzhalter.markdown(full_response)
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+    st.session_state.is_streaming = False
+    st.session_state.pending_prompt = None

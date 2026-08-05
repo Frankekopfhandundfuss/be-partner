@@ -13,9 +13,11 @@ genai.configure(api_key=api_key)
 
 ORDNER = "transkripte"
 INDEX_PATH = "index.json"
+MODELL_NAME = "models/gemini-3.5-flash"  # dein Original-Modell
+
 
 # ---------------------------------------------------------
-# 2. Index laden (klein, wird bei JEDER Frage mitgeschickt)
+# 2. Index laden (klein, wird bei JEDER Frage fuers Routing mitgeschickt)
 # ---------------------------------------------------------
 @st.cache_data
 def load_index():
@@ -39,7 +41,9 @@ def index_uebersicht(index):
 
 # ---------------------------------------------------------
 # 3. Volltext einer einzelnen Transkript-Datei laden
-#    (wird NUR fuer die tatsaechlich passenden Dateien aufgerufen)
+#    (fuer die Antwort wird NUR die tatsaechlich passende Datei genutzt;
+#     fuer die Diagnose-Zeile lesen wir zusaetzlich einmalig ALLE Dateien,
+#     das kostet aber keine Modell-Tokens, nur einen lokalen Festplattenzugriff)
 # ---------------------------------------------------------
 @st.cache_data
 def load_transcript(dateiname):
@@ -50,15 +54,37 @@ def load_transcript(dateiname):
         return f.read()
 
 
+@st.cache_data
+def berechne_diagnose(index):
+    gesamt_zeichen = 0
+    fehlende_dateien = []
+    for e in index:
+        text = load_transcript(e["datei"])
+        if text:
+            gesamt_zeichen += len(text)
+        else:
+            fehlende_dateien.append(e["datei"])
+    return gesamt_zeichen, fehlende_dateien
+
+
 index = load_index()
 
-model_router = genai.GenerativeModel("models/gemini-2.5-flash")
-model_antwort = genai.GenerativeModel("models/gemini-2.5-flash")
+gesamt_zeichen, fehlende_dateien = berechne_diagnose(index)
+st.info(
+    f"System-Diagnose: {len(index)} Videos im Index, "
+    f"insgesamt {gesamt_zeichen} Zeichen in den Transkripten geladen."
+)
+if fehlende_dateien:
+    st.warning(f"Achtung, nicht gefunden: {', '.join(fehlende_dateien)}")
+
+model = genai.GenerativeModel(MODELL_NAME)
 
 
 # ---------------------------------------------------------
 # 4. Schritt A: Welche Datei(en) passen zur Frage?
-#    -> Modell sieht NUR Titel/Themen, keinen Volltext
+#    -> eigener, GEDAECHTNISLOSER Aufruf (bewusst ohne Chat-Historie),
+#       damit das Routing nicht mit jeder neuen Frage langsamer/teurer wird.
+#       Die eigentliche Antwort (Schritt B) hat das Gedaechtnis.
 # ---------------------------------------------------------
 def finde_relevante_dateien(frage, index):
     prompt = f"""Hier ist eine Liste von Videos mit ID, Titel und Themen:
@@ -71,7 +97,7 @@ Antworte AUSSCHLIESSLICH mit den passenden IDs (z. B. V03), kommagetrennt.
 Kein Fliesstext, keine Erklaerung, keine Dateinamen.
 Wenn keine ID passt, schreibe genau: KEINE
 """
-    response = model_router.generate_content(prompt)
+    response = model.generate_content(prompt)
     text = response.text.strip()
 
     if text.upper() == "KEINE":
@@ -82,34 +108,11 @@ Wenn keine ID passt, schreibe genau: KEINE
     # Nur IDs akzeptieren, die WIRKLICH im Index existieren
     # -> verhindert, dass eine "erfundene" ID durchrutscht
     gefundene_eintraege = [index_by_id[k] for k in kandidaten if k in index_by_id]
-    # Rueckgabe als Liste der echten Dateinamen fuer den naechsten Schritt
     return [e["datei"] for e in gefundene_eintraege]
 
 
 # ---------------------------------------------------------
-# 5. Schritt B: Antwort NUR aus den gefundenen Dateien
-# ---------------------------------------------------------
-def beantworte_frage(frage, dateien):
-    volltext = ""
-    for datei in dateien:
-        volltext += f"\n--- {datei} ---\n"
-        volltext += load_transcript(datei)
-
-    prompt = f"""Du bist ein hilfsbereiter Assistent fuer eine Website.
-Beantworte die folgende Frage AUSSCHLIESSLICH basierend auf dem Transkript-Ausschnitt unten.
-Wenn die Antwort darin nicht zu finden ist, sag ehrlich, dass dir dazu keine Informationen vorliegen.
-Gib KEINE Links oder Dateinamen in deiner Antwort an - das erledigt die Anwendung automatisch.
-
-TRANSKRIPT:
-{volltext}
-
-FRAGE: {frage}
-"""
-    return model_antwort.generate_content(prompt, stream=True)
-
-
-# ---------------------------------------------------------
-# 6. Video-Links deterministisch aus dem Index bauen
+# 5. Video-Links deterministisch aus dem Index bauen
 #    -> das Modell hat damit NICHTS zu tun, also keine Halluzinationsgefahr
 # ---------------------------------------------------------
 def baue_video_links(dateien, index):
@@ -121,8 +124,12 @@ def baue_video_links(dateien, index):
 
 
 # ---------------------------------------------------------
-# 7. Chat-UI
+# 6. Chat-Session im Hintergrund am Leben halten (Gedaechtnis!)
+#    -> genau wie in deinem Original: start_chat + history in session_state
 # ---------------------------------------------------------
+if "chat_session" not in st.session_state:
+    st.session_state.chat_session = model.start_chat(history=[])
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -139,10 +146,37 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
         gefundene_dateien = finde_relevante_dateien(prompt, index)
 
         if not gefundene_dateien:
-            full_response = "Dazu liegen mir leider keine Informationen vor."
-            st.markdown(full_response)
+            # Kein passendes Video -> trotzdem an die Chat-Session schicken,
+            # damit der Gespraechsverlauf konsistent bleibt (z. B. Folgefragen).
+            hinweis_prompt = (
+                f"Der Nutzer fragt: \"{prompt}\"\n\n"
+                "Zu dieser Frage liegt kein passendes Transkript vor. "
+                "Antworte kurz und ehrlich, dass dir dazu keine Informationen vorliegen."
+            )
+            response = st.session_state.chat_session.send_message(hinweis_prompt, stream=True)
+
+            def stream_text():
+                for chunk in response:
+                    yield chunk.text
+
+            full_response = st.write_stream(stream_text())
         else:
-            response = beantworte_frage(prompt, gefundene_dateien)
+            volltext = ""
+            for datei in gefundene_dateien:
+                volltext += f"\n--- {datei} ---\n"
+                volltext += load_transcript(datei)
+
+            erweiterter_prompt = f"""Beantworte die folgende Frage AUSSCHLIESSLICH basierend auf dem
+Transkript-Ausschnitt unten. Wenn die Antwort darin nicht zu finden ist, sag ehrlich,
+dass dir dazu keine Informationen vorliegen. Gib KEINE Links oder Dateinamen in deiner
+Antwort an - das erledigt die Anwendung automatisch.
+
+TRANSKRIPT:
+{volltext}
+
+FRAGE: {prompt}
+"""
+            response = st.session_state.chat_session.send_message(erweiterter_prompt, stream=True)
 
             def stream_text():
                 for chunk in response:

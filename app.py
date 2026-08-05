@@ -115,6 +115,11 @@ system_prompt = (
     "gezeigt - NICHT gesammelt irgendwo anders, insbesondere nicht gesammelt ganz am "
     "Ende der gesamten Antwort.\n\n"
     f"HIER SIND DIE TRANSKRIPTE:\n{transcripts_text}"
+    "\n\n---\n\n"
+    "ERINNERUNG (wichtig, gilt für deine gleich folgende Antwort): Jeder inhaltliche "
+    "Themenblock deiner Antwort endet mit den passenden ID-Marker(n), z. B. [V05] oder "
+    "[V05][V11] - direkt unter diesem Themenblock, nach dem Muster aus dem Beispiel oben. "
+    "Sammle die Marker NICHT gesammelt am Ende der gesamten Antwort."
 )
 
 model = genai.GenerativeModel(

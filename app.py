@@ -16,6 +16,16 @@ ORDNER = "transkripte"
 INDEX_PATH = "index.json"
 MODELL_NAME = "models/gemini-3.1-flash-lite"  # deutlich hoeheres Freemium-Kontingent (500 RPD statt 20 RPD)
 
+# Startwert fuer die 4 Beispielfragen-Buttons, je ein grosses Themenfeld abdeckend.
+# Wird bei Bedarf per "Generiere neue Fragen"-Button durch vom Modell generierte
+# Fragen ERSETZT (siehe generiere_neue_fragen weiter unten) - siehe PROJEKT_STAND.md.
+STANDARD_FRAGEN = [
+    "Wie kommuniziere ich am besten mit blinden Kolleg:innen?",
+    "Wie gestalte ich Meetings barrierefrei für schwerhörige Mitarbeitende?",
+    "Was ist Neurodivergenz und welche Formen gibt es?",
+    "Welche Tipps gibt es für den Umgang mit Autismus oder ADHS im Team?",
+]
+
 
 # ---------------------------------------------------------
 # 2. Index laden (fuer die Link-Zuordnung unten, NICHT fuer den Modell-Kontext)
@@ -131,6 +141,42 @@ Wenn keine ID passt, schreibe genau: KEINE
     return [e["datei"] for e in gefundene_eintraege]
 
 
+def generiere_neue_fragen(bisherige_fragen):
+    """Laesst das Modell 4 neue Beispielfragen generieren, die inhaltlich zu den
+    Transkripten passen (ueber die gecachte system_instruction) und moeglichst nicht
+    mit bereits gezeigten Fragen inhaltlich ueberlappen.
+
+    Eigener, gedaechtnisloser Aufruf ueber model.generate_content() (NICHT ueber
+    chat_session.send_message()) - beeinflusst dadurch nicht die eigentliche
+    Gespraechshistorie im Chat, profitiert aber trotzdem vom gecachten,
+    stabilen system_instruction-Textblock (siehe PROJEKT_STAND.md, "Caching"-Learning).
+    """
+    ausschluss = "\n".join(f"- {f}" for f in bisherige_fragen)
+    routing_prompt = f"""Erstelle genau 4 neue Beispielfragen, die ein Nutzer an diesen \
+Chatbot stellen könnte und die anhand der oben vorliegenden Transkripte beantwortbar sind.
+
+Wähle die 4 Fragen aus möglichst unterschiedlichen Themenbereichen (z. B. Blindheit, \
+Schwerhörigkeit, Neurodivergenz/Autismus/ADHS/Legasthenie, Bewerbung/Recruiting).
+
+Vermeide inhaltlich (auch sinngemäß) folgende, bereits gezeigte Fragen:
+{ausschluss}
+
+Antworte AUSSCHLIESSLICH mit den 4 neuen Fragen, je eine pro Zeile, ohne Nummerierung, \
+ohne Aufzählungszeichen, ohne Anführungszeichen, ohne Erklärung.
+"""
+    response = model.generate_content(routing_prompt)
+    zeilen = [z.strip() for z in response.text.strip().split("\n") if z.strip()]
+    # Falls sich das Modell doch nicht an "keine Nummerierung/Bullets" haelt:
+    # fuehrende "1.", "1)", "-", "•" per Regex entfernen, genau wie schon bei
+    # ersetze_quellenmarker mit unerwarteten Modell-Formaten umgegangen wird.
+    bereinigt = [
+        re.sub(r"^[\d]+[\.\)]\s*|^[-•]\s*", "", z).strip(' "')
+        for z in zeilen
+    ]
+    bereinigt = [z for z in bereinigt if z][:4]
+    return bereinigt
+
+
 def ersetze_quellenmarker(text, index):
     index_by_id = {e["id"]: e for e in index}
 
@@ -207,6 +253,23 @@ if "is_streaming" not in st.session_state:
 if "pending_prompt" not in st.session_state:
     st.session_state.pending_prompt = None
 
+# Aktuell angezeigte 4 Beispielfragen-Buttons (werden beim Klick auf "Generiere
+# neue Fragen" ERSETZT, siehe Nutzerentscheidung in PROJEKT_STAND.md).
+if "beispielfragen" not in st.session_state:
+    st.session_state.beispielfragen = STANDARD_FRAGEN.copy()
+
+# Sammelt ALLE Fragen, die in dieser Sitzung schon mal als Button zu sehen waren
+# (inkl. der urspruenglichen 4) - wird dem Modell beim Nachgenerieren als
+# Ausschlussliste mitgegeben, damit es keine Wiederholungen vorschlaegt.
+if "gezeigte_fragen" not in st.session_state:
+    st.session_state.gezeigte_fragen = STANDARD_FRAGEN.copy()
+
+# Analog zu pending_prompt, aber fuer die "Generiere neue Fragen"-Aktion statt
+# einer normalen Chat-Frage - separater Flag, damit Schritt 2 unten weiss,
+# welche der beiden Aktionen gerade auszufuehren ist.
+if "frage_generierung_angefordert" not in st.session_state:
+    st.session_state.frage_generierung_angefordert = False
+
 with st.sidebar:
     st.caption(
         "Falls die App mal haengen bleibt (Eingabefeld dauerhaft "
@@ -219,6 +282,47 @@ with st.sidebar:
         st.session_state.is_streaming = False
         st.session_state.pending_prompt = None
         st.rerun()
+
+# ---------------------------------------------------------
+# 4b. Begruessungstext + Beispielfragen-Buttons
+#     -> bewusst dauerhaft sichtbar (nicht nur beim Start), Nutzerentscheidung.
+#     -> Klick auf eine Beispielfrage geht ueber GENAU DENSELBEN Pfad wie eine
+#        normale st.chat_input-Eingabe (pending_prompt + is_streaming + rerun),
+#        damit der IncompleteIterationError-Fix nicht durch einen zweiten,
+#        abweichenden Eingabeweg umgangen wird.
+#     -> Alle Buttons werden waehrend is_streaming gesperrt, aus demselben
+#        Grund: verhindert, dass waehrend einer laufenden Antwort eine zweite
+#        Anfrage (Chat-Frage oder Frage-Generierung) ausgeloest wird.
+# ---------------------------------------------------------
+st.markdown(
+    "💡 Ich kann dir Fragen zu 29 Schulungsvideos zu Blindheit, Schwerhörigkeit "
+    "und Neurodivergenz am Arbeitsplatz beantworten und dir passende Videos "
+    "verlinken. Hier ein paar Beispiele zum Einstieg:"
+)
+
+frage_spalten = st.columns(4)
+for i, frage in enumerate(st.session_state.beispielfragen):
+    with frage_spalten[i]:
+        if st.button(
+            frage,
+            key=f"beispielfrage_{i}",
+            disabled=st.session_state.is_streaming,
+            use_container_width=True,
+        ):
+            st.session_state.pending_prompt = frage
+            st.session_state.is_streaming = True
+            st.rerun()
+
+if st.button(
+    "🔄 Generiere 4 neue Fragen",
+    key="neue_fragen_generieren",
+    disabled=st.session_state.is_streaming,
+):
+    st.session_state.frage_generierung_angefordert = True
+    st.session_state.is_streaming = True
+    st.rerun()
+
+st.divider()
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -298,4 +402,26 @@ if st.session_state.is_streaming and st.session_state.pending_prompt:
     # war da noch True) - das Zuruecksetzen der Variable hier aendert daran
     # nichts mehr rueckwirkend. Erst ein weiterer Durchlauf zeichnet das Feld
     # mit disabled=False neu.
+    st.rerun()
+
+# Schritt 2b: "Generiere 4 neue Fragen"-Button wurde geklickt -> eigener,
+# gedaechtnisloser model.generate_content()-Aufruf (siehe generiere_neue_fragen),
+# betrifft NICHT die chat_session/Gespraechshistorie. Laeuft ueber denselben
+# is_streaming-Sperrmechanismus wie Schritt 2, deshalb "elif" statt eigenem "if".
+elif st.session_state.is_streaming and st.session_state.frage_generierung_angefordert:
+    try:
+        neue_fragen = generiere_neue_fragen(st.session_state.gezeigte_fragen)
+        if len(neue_fragen) == 4:
+            st.session_state.beispielfragen = neue_fragen
+            st.session_state.gezeigte_fragen.extend(neue_fragen)
+        # Falls das Modell keine 4 verwertbaren Zeilen liefert: alte Fragen
+        # bleiben einfach stehen, kein Crash, kein Nutzer-sichtbarer Fehler
+        # noetig (nur ein Komfort-Feature, kein Kern-Chat-Ablauf).
+    except Exception:
+        pass  # gleiche Haltung: alte Fragen bleiben bei API-Fehlern stehen
+
+    st.session_state.frage_generierung_angefordert = False
+    st.session_state.is_streaming = False
+    # Gleicher Grund wie beim rerun oben: das Eingabefeld/die Buttons wurden
+    # in diesem Durchlauf bereits mit disabled=True gezeichnet.
     st.rerun()

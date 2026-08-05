@@ -7,6 +7,37 @@ import google.generativeai as genai
 st.title("Transkript Assistent")
 
 # ---------------------------------------------------------
+# 0b. Scroll-Fix: Streamlit hat eine interne Komponente mit
+#     data-testid="ScrollToBottomContainer", die dafuer sorgt, dass die Seite
+#     automatisch nach unten mitscrollt (u. a. gekoppelt an st.chat_input, das
+#     "unten kleben" soll). Das fuehrt zu zwei unerwuenschten Effekten:
+#     1) Beim Laden scrollt die Seite ungewollt weit nach unten (statt beim
+#        Begruessungstext oben zu bleiben).
+#     2) Waehrend eine lange Antwort per write_stream() eintrifft, "folgt" die
+#        Ansicht dem wachsenden Text nach unten, statt am Anfang der Antwort
+#        zu bleiben, wo man eigentlich zu lesen anfangen will.
+#     Fix: reines CSS, kein JavaScript - deaktiviert die Auto-Scroll-Komponente
+#     ueber overflow: hidden. Kein offizielles, dokumentiertes Streamlit-
+#     Feature (data-testid kann sich mit kuenftigen Streamlit-Versionen
+#     aendern), aber deutlich robuster als eine JS-basierte Loesung: reine
+#     CSS-Regel, kein Skript, das bei einer Strukturaenderung crashen koennte
+#     - im schlimmsten Fall wirkt die Regel einfach nicht mehr.
+#     Empfehlung (siehe PROJEKT_STAND.md): Streamlit-Version in
+#     requirements.txt pinnen, damit ein Update nicht ungewollt/unbemerkt
+#     dieses Verhalten wieder aendert.
+# ---------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    [data-testid="ScrollToBottomContainer"] {
+        overflow: hidden;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------
 # 1. Setup
 # ---------------------------------------------------------
 api_key = st.secrets["GEMINI_API_KEY"]

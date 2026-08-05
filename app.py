@@ -293,3 +293,9 @@ if st.session_state.is_streaming and st.session_state.pending_prompt:
     st.session_state.messages.append({"role": "assistant", "content": full_response})
     st.session_state.is_streaming = False
     st.session_state.pending_prompt = None
+    # Ohne diesen rerun bliebe das Eingabefeld gesperrt: es wurde ganz oben
+    # in diesem Durchlauf bereits mit disabled=True gezeichnet (is_streaming
+    # war da noch True) - das Zuruecksetzen der Variable hier aendert daran
+    # nichts mehr rueckwirkend. Erst ein weiterer Durchlauf zeichnet das Feld
+    # mit disabled=False neu.
+    st.rerun()

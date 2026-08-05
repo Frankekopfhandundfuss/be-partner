@@ -14,7 +14,7 @@ genai.configure(api_key=api_key)
 
 ORDNER = "transkripte"
 INDEX_PATH = "index.json"
-MODELL_NAME = "models/gemini-3.5-flash"  # dein Original-Modell
+MODELL_NAME = "models/gemini-3.1-flash-lite"  # deutlich hoeheres Freemium-Kontingent (500 RPD statt 20 RPD)
 
 
 # ---------------------------------------------------------

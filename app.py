@@ -143,7 +143,7 @@ def ersetze_quellenmarker(text, eintraege):
         eintrag = index_by_id.get(vid)
         if not eintrag:
             return ""  # unbekannte/erfundene ID -> einfach entfernen
-        return f" [🎥 {eintrag['titel']}]({eintrag['link']})"
+        return f"\n\n**🎥 [{eintrag['titel']}]({eintrag['link']})**\n"
 
     return re.sub(r"\[(V\d{2})\]", ersetzung, text)
 
@@ -202,17 +202,19 @@ if prompt := st.chat_input("Stell mir eine Frage zu den Transkripten..."):
 
             gueltige_ids = ", ".join(e["id"] for e in gefundene_eintraege)
             erweiterter_prompt = f"""Beantworte die folgende Frage AUSSCHLIESSLICH basierend auf den
-Transkript-Ausschnitten unten. Wenn die Antwort darin nicht zu finden ist, sag ehrlich,
-dass dir dazu keine Informationen vorliegen.
+Transkript-Ausschnitten unten.
 
-Kennzeichne die Quelle NICHT nach jedem einzelnen Aufzaehlungspunkt, sondern nur EINMAL
-am Ende jedes zusammenhaengenden Absatzes bzw. thematischen Abschnitts. Setze dazu den
-kurzen Marker der Quelle in eckigen Klammern an das Ende des Absatzes, z. B. [{gefundene_eintraege[0]['id']}].
-Wenn ein Absatz Informationen aus mehreren Quellen zusammenfasst, nenne alle passenden
-IDs direkt hintereinander, z. B. [{gefundene_eintraege[0]['id']}][{gefundene_eintraege[0]['id']}].
-Nutze dafuer AUSSCHLIESSLICH diese Quell-IDs: {gueltige_ids}
-Erfinde KEINE eigenen IDs, nenne KEINE Dateinamen oder Links - das erledigt die Anwendung
-automatisch anhand deiner Marker.
+Arbeite die Quellen NACHEINANDER ab, in genau dieser Reihenfolge: {gueltige_ids}
+Verweb die Inhalte NICHT thematisch miteinander. Beginne fuer JEDE Quelle einen eigenen
+Abschnitt und setze GANZ AM ANFANG dieses Abschnitts genau einmal den Marker der Quelle
+in eckigen Klammern (z. B. [{gefundene_eintraege[0]['id']}]). Danach fasse knapp zusammen,
+was in genau diesem Video zur Frage relevant ist. Kein weiterer Marker innerhalb des
+Abschnitts noetig.
+Wenn eine Quelle nichts Relevantes zur Frage enthaelt, lass ihren Abschnitt einfach weg.
+Wenn KEINE der Quellen etwas Relevantes enthaelt, sag ehrlich, dass dir dazu keine
+Informationen vorliegen.
+Nenne KEINE Dateinamen oder Links selbst - das erledigt die Anwendung automatisch anhand
+deiner Marker.
 
 TRANSKRIPTE:
 {volltext}
